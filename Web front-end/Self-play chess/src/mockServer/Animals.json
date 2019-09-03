@@ -1,0 +1,346 @@
+{
+  "Animals": [
+    {
+      "id": 1,
+      "name": "bage",
+      "price": 3,
+      "level": 1,
+      "hp": 50,
+      "attack": 65,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/bage.jpg"
+    },
+    {
+      "id": 2,
+      "name": "banma",
+      "price": 3,
+      "level": 1,
+      "hp": 70,
+      "attack": 75,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/banma.jpg"
+
+    },
+    {
+      "id": 3,
+      "name": "baozi",
+      "price": 4,
+      "level": 1,
+      "hp": 85,
+      "attack": 85,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/baozi.jpg"
+    },
+    {
+      "id": 4,
+      "name": "mifeng",
+      "price": 3,
+      "level": 1,
+      "hp": 45,
+      "attack": 55,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/bee.jpg"
+    },
+    {
+      "id": 5,
+      "name": "bianfu",
+      "price": 4,
+      "level": 1,
+      "hp": 65,
+      "attack": 75,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/bianfu.jpg"
+    },
+    {
+      "id": 6,
+      "name": "daxiang",
+      "price": 6,
+      "level": 1,
+      "hp": 100,
+      "attack": 85,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/daxiang.jpg"
+    },
+    {
+      "id": 7,
+      "name": "gou",
+      "price": 4,
+      "level": 1,
+      "hp": 75,
+      "attack": 70,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/dog.jpg"
+    },
+    {
+      "id": 8,
+      "name": "eyu",
+      "price": 6,
+      "level": 1,
+      "hp": 100,
+      "attack": 80,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/eyu.jpg"
+    },
+    {
+      "id": 9,
+      "name": "gezi",
+      "price": 4,
+      "level": 1,
+      "hp": 60,
+      "attack": 55,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/gezi.jpg"
+    },
+    {
+      "id": 10,
+      "name": "haibao",
+      "price": 5,
+      "level": 1,
+      "hp": 70,
+      "attack": 55,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/haibao.jpg"
+    },
+    {
+      "id": 11,
+      "name": "haima",
+      "price": 4,
+      "level": 1,
+      "hp": 65,
+      "attack": 30,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/haima.jpg"
+    },
+    {
+      "id": 12,
+      "name": "haitun",
+      "price": 5,
+      "level": 1,
+      "hp": 75,
+      "attack": 80,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/haitun.jpg"
+    },
+    {
+      "id": 13,
+      "name": "hema",
+      "price": 7,
+      "level": 1,
+      "hp": 95,
+      "attack": 80,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/hema.jpg"
+    },
+    {
+      "id": 14,
+      "name": "jingyu",
+      "price": 8,
+      "level": 1,
+      "hp": 105,
+      "attack": 90,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/jingyu.jpg"
+    },
+    {
+      "id": 15,
+      "name": "konglong",
+      "price": 9,
+      "level": 1,
+      "hp": 110,
+      "attack": 90,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/konglong.jpg"
+    },
+    {
+      "id": 16,
+      "name": "long",
+      "price": 9,
+      "level": 1,
+      "hp": 120,
+      "attack": 100,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/long.jpg"
+    },
+    {
+      "id": 17,
+      "name": "longxia",
+      "price": 4,
+      "level": 1,
+      "hp": 60,
+      "attack": 65,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/longxia.jpg"
+    },
+    {
+      "id": 18,
+      "name": "maotouying",
+      "price": 4,
+      "level": 1,
+      "hp": 65,
+      "attack": 55,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/maotouying.jpg"
+    },
+    {
+      "id": 19,
+      "name": "pangxie",
+      "price": 5,
+      "level": 1,
+      "hp": 65,
+      "attack": 55,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/pangxue.jpg"
+    },
+    {
+      "id": 20,
+      "name": "zhu",
+      "price": 5,
+      "level": 1,
+      "hp": 70,
+      "attack": 55,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/pig.jpg"
+    },
+    {
+      "id": 21,
+      "name": "qingting",
+      "price": 3,
+      "level": 1,
+      "hp": 35,
+      "attack": 30,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/qingting.jpg"
+    },
+    {
+      "id": 22,
+      "name": "shanyang",
+      "price": 4,
+      "level": 1,
+      "hp": 60,
+      "attack": 55,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/shanyang.jpg"
+    },
+    {
+      "id": 23,
+      "name": "shayu",
+      "price": 6,
+      "level": 1,
+      "hp": 80,
+      "attack": 75,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/shayu.jpg"
+    },
+    {
+      "id": 24,
+      "name": "lang",
+      "price": 5,
+      "level": 1,
+      "hp": 70,
+      "attack": 70,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/wolf.jpg"
+    },
+    {
+      "id": 25,
+      "name": "haigui",
+      "price": 6,
+      "level": 1,
+      "hp": 80,
+      "attack": 55,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/wugui.jpg"
+    },
+    {
+      "id": 26,
+      "name": "yanzi",
+      "price": 4,
+      "level": 1,
+      "hp": 45,
+      "attack": 40,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/yangzi.jpg"
+    },
+    {
+      "id": 27,
+      "name": "yingwu",
+      "price": 6,
+      "level": 1,
+      "hp": 50,
+      "attack": 35,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/yingwu.jpg"
+    },
+    {
+      "id": 28,
+      "name": "yu",
+      "price": 5,
+      "level": 1,
+      "hp": 60,
+      "attack": 55,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/yu.jpg"
+    },
+    {
+      "id": 29,
+      "name": "zhangyu",
+      "price": 5,
+      "level": 1,
+      "hp": 70,
+      "attack": 60,
+      "animalKind": "sea",
+      "isAlive": true,
+      "img": "assets/images/zhangyu.jpg"
+    },
+    {
+      "id": 30,
+      "name": "laohu",
+      "price": 8,
+      "level": 1,
+      "hp": 100,
+      "attack": 85,
+      "animalKind": "land",
+      "isAlive": true,
+      "img": "assets/images/tiger.jpg"
+    },
+    {
+      "id": 31,
+      "name": "laoying",
+      "price": 6,
+      "level": 1,
+      "hp": 80,
+      "attack": 75,
+      "animalKind": "air",
+      "isAlive": true,
+      "img": "assets/images/eagle.jpg"
+    }
+  ]
+}
