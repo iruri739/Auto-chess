@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accenture.huaweigroup.module.mapper.GameRecordMapper">
+
+    <resultMap id="getGameEntityResultMap" type="com.accenture.huaweigroup.module.entity.GameRecord">
+        <id property="recordId" column="record_id"/>
+        <result property="playerOneId" column="player_one_id"/>
+        <result property="playaerTwoId" column="player_two_id"/>
+        <result property="winnerId" column="winner_id"/>
+        <result property="gameState" column="game_status"/>
+        <result property="gameId" column="game_id"/>
+    </resultMap>
+
+
+    <select id="findByGameId" parameterType="int" resultMap="getGameEntityResultMap">
+        select * from game where game_id = #{gameId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="recordId" parameterType="com.accenture.huaweigroup.module.entity.GameRecord">
+        insert into game(player_one_id, player_two_id, winner_id, game_status, game_id)
+            values (#{playerOneId, jdbcType=INTEGER}, #{playerTwoId, jdbcType=INTEGER},
+             #{winnerId, jdbcType=INTEGER}, #{gameStatus}, #{gameId})
+    </insert>
+
+    <!--<update id="update" parameterType="com.accenture.huaweigroup.module.entity.GameRecord">-->
+        <!--update game-->
+            <!--<set>-->
+                <!--<if test="userId != null">user_id = #{userId}, </if>-->
+                <!--<if test="otherUserId != null">other_user_id = #{otherUserId},</if>-->
+                <!--<if test="winnerId != null">winner_id = #{winnerId},</if>-->
+                <!--<if test="gameStatus != null">game_status = #{gameStatus}</if>-->
+            <!--</set>-->
+            <!--where game_id = #{gameId}-->
+    <!--</update>-->
+
+</mapper>

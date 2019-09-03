@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accenture.huaweigroup.module.mapper.UserMapper">
+
+    <resultMap id="getUserResultMap" type="com.accenture.huaweigroup.module.entity.User">
+        <id property="id" column="user_id"/>
+        <result property="name" column="user_name"/>
+        <result property="pwd" column="user_password"/>
+        <result property="avatar" column="user_avatar"/>
+        <result property="nickName" column="user_nickname"/>
+    </resultMap>
+
+
+
+    <select id="getUserByName" parameterType="String" resultMap="getUserResultMap">
+        select * from user where user_name = #{name}
+    </select>
+
+    <select id="getUserById" parameterType="_int" resultMap="getUserResultMap">
+        select * from user where user_id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.accenture.huaweigroup.module.entity.User">
+        insert into user(user_name, user_password, user_avatar, user_nickname)
+            values (#{name}, #{pwd}, #{avatar, jdbcType=VARCHAR}, #{nickName})
+    </insert>
+
+</mapper>
