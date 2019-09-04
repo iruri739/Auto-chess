@@ -22,7 +22,7 @@
             <meter
               min="0"
               max="100"
-              value="100"
+              value="40"
               low="30"
               high="80"
               style="width: 200px;"

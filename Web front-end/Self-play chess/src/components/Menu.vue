@@ -21,7 +21,7 @@
           <li :style="aa">{{li1}}</li>
           <li :style="aa">{{li2}}</li>
           <li>1vs1</li>
-          <li>6</li>
+          <li>{{glod}}</li>
         </ul>
 
         <div class="bottom">
@@ -40,6 +40,7 @@ import img from "@/assets/imgs/ling.jpg"
 export default {
   
   name: "Menu",
+   props:['glod'],
   data: function() {
     return {
       li1: "准备中",

@@ -7,6 +7,7 @@ import Player from '@/components/Player.vue'
 import Waiting from '@/components/Waiting.vue'
 import Sceeing from '@/components/Sceeing.vue'
  import Meenu from '@/components/Meenu.vue'
+//  import Login from '@/components/Login.vue'
 
 Vue.use(Router)
 
@@ -47,7 +48,13 @@ export default new Router({
       name: 'Meenu',
       component: Meenu,
       
-    },
+     },
+    // {
+    //   path: '/',
+    //   name: 'Login',
+    //   component: Login,
+      
+    // },
     
   ]
 })

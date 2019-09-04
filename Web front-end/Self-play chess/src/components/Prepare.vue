@@ -10,7 +10,7 @@
         </ul>
         <div class="icon_l">
           <span @click="getMockData()"  class="iconfont icon-refresh"></span>
-          <span class="iconfont icon-coinyen">2</span>
+          <span class="iconfont icon-coinyen">{{glod}}</span>
         </div>
         <div class="icon_r">
           <span class="iconfont icon-close1"></span>
@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  props:['state2'],
+  props:['state2','glod'],
   name: "Store",
   data: function() {
     return {
@@ -32,6 +32,7 @@ export default {
         state2(){
           debugger
           this.state2
+          
         }
     },
   mounted() {

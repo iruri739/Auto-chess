@@ -5,20 +5,11 @@
 
       <div class="block">
         <span class="demonstration"></span>
-        <!-- <el-carousel height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel> -->
       </div>
 
       <div class="block">
         <span class="demonstration"></span>
-        <!-- <el-carousel trigger="click" height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel> -->
+
       </div>
       <div class="d1">
         <div>
@@ -44,6 +35,8 @@
             <el-button type="button" @click="open">取消匹配</el-button>
           </div>
 
+          <!-- <div class="prompt_text">群发创建失败，<span id="num">{{count}}</span>秒后转至群发记录</div> -->
+
           <div>
             <div class="textBox">
               <transition name="slide">
@@ -62,6 +55,8 @@
   </div>
 </template>
 <script>
+import { clearTimeout } from 'timers';
+import { close } from 'fs';
 // import touxiang1 from '@/assets/touxiang1.jpg';
 // import touxiang2 from '@/assets/touxiang2.jpg';
 // import touxiang3 from '@/assets/touxiang3.jpg';
@@ -84,9 +79,13 @@ export default {
         " 棋子分为海、陆、空三种不同类型，相互之间有制约关系。",
         " 当一局游戏结束后，会开始下一轮，直至玩家生命值为0。"
       ],
-      number: 0
+      number: 0,
+       sec: 6,
     };
   },
+  // created() {   
+  //   this.timer = setInterval(this.descTimer, 1000);
+  // },
   computed: {
     text() {
       return {
@@ -100,9 +99,21 @@ export default {
   },
   mounted() {
     this.startMove();
+    this.timer = setInterval(this.descTimer, 1000);
   },
 
   methods: {
+    descTimer() {
+      this.sec -= 1;
+      if (this.sec == 0) {
+        debugger
+            this.$router.push({ path: "/Sceeing"});
+      }    
+    },
+
+  
+
+
     startMove() {
       // eslint-disable-next-line
       let timer = setTimeout(() => {
@@ -125,34 +136,15 @@ export default {
           this.$message({
             type: "info",
             message: "已取消退出"
-
-          });
-          this.$router.push({ path: "/Sceeing" });
+          });        
         })
         .catch(() => {
+          
           this.$router.push({ path: "/"});
+          clearTimeout();
+          
         });
     },
-    //几秒后进入跳转页面
-    clickJump(){ 
-      const timejump = 1;
-      if (!this.timer) {
-        this.count = timejump;
-        this.show = false;
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= timejump) {
-            this.count--;
-          } else {
-            this.show = true;
-            clearInterval(this.timer);
-            this.timer = null;
-            this.$router.push({ path: "/Sceeing" });
-           
-          }
-           
-        }, 6000);
-      }
-    }
   }
 };
 </script>

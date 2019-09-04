@@ -5,6 +5,7 @@ const RESQUEST_ARTICLES = 'RESQUEST_ARTICLES'
 export default {
   state: {
     articles: []
+    
   },
 
   getters: {

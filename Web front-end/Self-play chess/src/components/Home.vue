@@ -7,8 +7,8 @@
       </div>
     </div> -->
      <Draglo></Draglo> 
-    <Menu @aaa='aaa'></Menu>
-    <Prepare :state2='Pstate'></Prepare>
+    <Menu @aaa='aaa'  :glod='val'></Menu>
+    <Prepare :state2='Pstate' :glod='val'></Prepare>
     <Battle :state1='Bstate'></Battle>
     <Player></Player>
     
@@ -38,7 +38,9 @@ export default {
     return {
       img,
       Pstate:true,
-      Bstate:false
+      Bstate:false,
+      val:20
+     
     }
   },
    methods:{
@@ -57,7 +59,8 @@ export default {
 .container{
   width: 100%;
   height: 900px;
-  background-image: url('../assets/imgs/save.jpg');
+  background-image: url('../assets/imgs/saei.jpg');
+  background-size: cover;
 }
 .box{
   width:100%;
