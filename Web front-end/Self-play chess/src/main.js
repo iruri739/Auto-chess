@@ -6,7 +6,7 @@ Vue.config.productionTip = false
 import './mock.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import article from './module.js'
+import game from './module.js'
 import './plugins/element.js'
 
 import VueRouter from 'vue-router'
@@ -17,7 +17,7 @@ Vue.use(Vuex)
 // 创建Vuex的store
 const store = new Vuex.Store({
   modules: {
-    article
+    game
   }
 })
 

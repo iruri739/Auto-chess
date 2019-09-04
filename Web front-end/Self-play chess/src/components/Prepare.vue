@@ -3,9 +3,9 @@
     <div class="box">
       <div class="top">
         <ul class="store">
-          <li v-for="(item,index) in Animals" :key="index">
-            <img :src="makeUrl(item.img)"/>
-           <span class="iconfont icon-coinyen">{{item.price}}</span>
+          <li v-for="(item,index) in Animals" :key="index"  @click="paper(item)">
+            <img :src="getImage(item.img)"/>
+           <span class="iconfont icon-coinyen">{{item.price}} {{index}}</span>
           </li>
         </ul>
         <div class="icon_l">
@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+
 export default {
   props:['state2','glod'],
   name: "Store",
@@ -42,25 +43,36 @@ export default {
  computed: {
     },
   methods: {
-    
-    makeUrl(url) {
-      return require("@/" + url);
+    paper(value){
+      
+      
+     this.$emit("buy",value)
+
+    },
+    getImage(imgName) {
+        
+      var img = imgName; 
+     
+      return require("../assets/images/"+img+".jpg");
+
     },
     getMockData() {
-      // let news=resp.data.splice(0,1);
-      // console.log(news);
+      
+      this.$http.get("http://localhost:8888/game/getChessData/").then(resp =>{
+                this.Animals=resp.data
+ })
 
-      this.axios.get("/mock/Animals").then(resp => {
-        var sd = [];
-        for (let i = 0; i < 5; i++) {
-          sd.push(resp.data[Math.floor(Math.random() * 31 + 1)]);
-        }
-        this.Animals = sd;
+      // this.axios.get("/mock/Animals").then(resp => {
+      //   var sd = [];
+      //   for (let i = 0; i < 5; i++) {
+      //     sd.push(resp.data[Math.floor(Math.random() * 31 + 1)]);
+      //   }
+      //   this.Animals = sd;
 
-        // let news=resp.data.splice(0,1);
-        // console.log(news);
-        // this.Animals = resp.data[2];
-      });
+      //   // let news=resp.data.splice(0,1);
+      //   // console.log(news);
+      //   // this.Animals = resp.data[2];
+      // });
     }
   }
 };

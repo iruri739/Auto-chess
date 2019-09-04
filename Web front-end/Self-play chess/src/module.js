@@ -4,27 +4,28 @@ const RESQUEST_ARTICLES = 'RESQUEST_ARTICLES'
 
 export default {
   state: {
-    articles: []
-    
+    game:[],
+    player1:[],
+    player2:[]
   },
 
   getters: {
-    getArticles: state => state.articles
+    getGame: state => state.game
   },
 
   actions: {
-    fetchArticlesData (context) {
+    fetchGameData (context) {
       context.commit(RESQUEST_ARTICLES)
     }
   },
 
   mutations: {
     [RESQUEST_ARTICLES] (state) {
-      axios.get('/article').then(
+      axios.get('/game').then(
         response => {
          
           let data = response.data
-          state.articles = data.articles
+          state.game = data.game
         }
       )
     }

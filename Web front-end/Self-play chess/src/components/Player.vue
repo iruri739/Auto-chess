@@ -22,7 +22,7 @@
             <meter
               min="0"
               max="100"
-              value="40"
+              :value='val'
               low="30"
               high="80"
               style="width: 200px;"
@@ -66,6 +66,7 @@ import draggable from "vuedraggable";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
+  props:['animals','val'],
   components: {
     draggable,
     Prepare,
@@ -74,11 +75,13 @@ export default {
     return {
       message :["bage","banma","baozi","baozi","bee","dog","gezi","haibao"],
       logo:["bage","banma","baozi","baozi","bee","dog","gezi","haibao"],
+      animals:[],
       list: [],
       list2: [],
       editable: true,
       isDragging: false,
-      delayedDragging: false
+      delayedDragging: false,
+      
     };
   },
   mounted() {

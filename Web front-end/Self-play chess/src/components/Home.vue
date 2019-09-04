@@ -7,10 +7,21 @@
       </div>
     </div> -->
      <Draglo></Draglo> 
-    <Menu @aaa='aaa'  :glod='val'></Menu>
-    <Prepare :state2='Pstate' :glod='val'></Prepare>
-    <Battle :state1='Bstate'></Battle>
-    <Player></Player>
+    <Menu @aaa='aaa'  
+          :glod='player.gold'
+          :number='player.winCount' 
+          >
+          </Menu>
+    <Prepare :state2='Pstate' 
+    :glod='player.gold' 
+    @buy="buya">
+    </Prepare>
+    <Battle :state1='Bstate'>
+
+    </Battle>
+    <Player :animals='Animals' 
+    :val='player.hp'>
+    </Player>
     
   </div>
 </template>
@@ -21,7 +32,7 @@ import Prepare from './Prepare'
 import Menu from './Menu'
 import Battle from './Battle'
 import Player from './Player'
-import img from '@/assets/imgs/save.jpg';
+import img from '@/assets/imgs/save.jpg'
 export default {
   name: "Home",
   props: {
@@ -36,24 +47,42 @@ export default {
   },
   data:function(){
     return {
+      Animals:[],
       img,
       Pstate:true,
       Bstate:false,
-      val:20
-     
+      playerId:1,
+      player:{}
     }
   },
-   methods:{
+  mounted(){
+ this.getPlayer()},
+   methods:{  
+      getPlayer(){
+      this.$http.get("http://localhost:8888/game/getPlayerData?playerId=1").then(resp =>{
+               this.player=resp.data
+    })
+
+ },
+
+ 
+
     aaa(value1,value2){
       debugger
+     
       this.Bstate=value1,
       this.Pstate=value2
+    },
+    buya(value){
+        
+        this.Animals.plus(value);
+       
     }
   }
 
 };
 </script>
-
+  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container{

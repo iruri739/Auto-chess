@@ -5,7 +5,7 @@
       <div class="box">
         <ul class="top">
           <li></li>
-          <li>round1</li>
+          <li>round{{number}}</li>
           <li>
             <div class="timer">
               <div ref="startTimer"></div>
@@ -40,7 +40,7 @@ import img from "@/assets/imgs/ling.jpg"
 export default {
   
   name: "Menu",
-   props:['glod'],
+   props:['glod','number'],
   data: function() {
     return {
       li1: "准备中",
@@ -52,7 +52,7 @@ export default {
       minutes: 0,
       seconds: 0,
       min: 0,
-      sec: 30,
+      sec: 40,
       flg: true,
       Bstate: true,
       Pstate: false,
