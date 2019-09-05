@@ -75,8 +75,9 @@ export default {
     },
     buya(value){
         
-        this.Animals.plus(value);
-       
+    value.fixed=false;
+        this.Animals.push(value)
+      console.log(this.Animals)
     }
   }
 

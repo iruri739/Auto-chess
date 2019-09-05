@@ -3,14 +3,14 @@
     <div class="box">
       <div class="top">
         <ul class="store">
-          <li v-for="(item,index) in Animals" :key="index"  @click="paper(item)">
-            <img :src="getImage(item.img)"/>
-           <span class="iconfont icon-coinyen">{{item.price}} {{index}}</span>
+          <li v-for="(item,index) in Animals" :key="index">
+            <img :class="{'active':item.checked}" :src="getImage(item.img)" @click="buycards(item)" />
+            <span class="iconfont icon-coinyen">{{item.price}}</span>
           </li>
         </ul>
         <div class="icon_l">
-          <span @click="getMockData()"  class="iconfont icon-refresh"></span>
-          <span class="iconfont icon-coinyen">{{glod}}</span>
+          <span @click="getShop()" class="iconfont icon-refresh"></span>
+          <span class="iconfont icon-coinyen">{{gold}}</span>
         </div>
         <div class="icon_r">
           <span class="iconfont icon-close1"></span>
@@ -20,59 +20,76 @@
   </div>
 </template>
 <script>
-
 export default {
-  props:['state2','glod'],
+  props: ["state2", "glod"],
   name: "Store",
   data: function() {
     return {
-      Animals:[]
+      Animals: [],
+      bought: [],
+      gold: 0
     };
   },
-  watch:{
-        state2(){
-          debugger
-          this.state2
-          
-        }
+  watch: {
+    state2() {
+      debugger;
+      this.state2;
     },
+    glod: function(newVal, oldVal) {
+      this.gold = newVal;
+    }
+  },
   mounted() {
-    
     this.getMockData();
   },
- computed: {
-    },
+  computed: {},
   methods: {
-    paper(value){
-      
-      
-     this.$emit("buy",value)
-
+    getShop() {
+      if (this.gold>= 2) {
+        this.gold -= 2;
+        this.getMockData();
+      } else if (this.gold <= 1) {
+        alert("金币不足");
+      }
+    },
+    deletcard(bought, item) {
+      for (let i = 0; i < bought.length; i++) {
+        if (bought[i].id == item.id) {
+          bought.splice(i, 1);
+          return bought;
+        }
+      }
+    },
+    buycards(item) {
+      if (typeof item.checked == "undefined" || item.checked == false) {
+        if (this.gold >= item.price) {
+          if (!this.bought) {
+            this.bought = [];
+          }
+          this.$emit("buy", item);
+          this.bought.push(item);
+          this.gold -= item.price;
+          this.$set(item, "checked", true);
+        } else {
+          alert("金币不足");
+          this.bought = this.deletcard(this.bought, item);
+        }
+      } 
+      // else {
+      //   item.checked = !item.checked;
+      //   this.gold += item.price;
+      //   this.bought = this.deletcard(this.bought, item);
+      // }
     },
     getImage(imgName) {
-        
-      var img = imgName; 
-     
-      return require("../assets/images/"+img+".jpg");
+      var img = imgName;
 
+      return require("../assets/images/" + img + ".jpg");
     },
     getMockData() {
-      
-      this.$http.get("http://localhost:8888/game/getChessData/").then(resp =>{
-                this.Animals=resp.data
- })
-
-      // this.axios.get("/mock/Animals").then(resp => {
-      //   var sd = [];
-      //   for (let i = 0; i < 5; i++) {
-      //     sd.push(resp.data[Math.floor(Math.random() * 31 + 1)]);
-      //   }
-      //   this.Animals = sd;
-
-      //   // let news=resp.data.splice(0,1);
-      //   // console.log(news);
-      //   // this.Animals = resp.data[2];
-      // });
+      this.$http.get("http://localhost:8888/game/getChessData/").then(resp => {
+        this.Animals = resp.data;
+      });
     }
   }
 };
@@ -132,11 +149,17 @@ ul li {
   height: 100px;
   border-radius: 50%;
 }
+.active {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  opacity: 0.4;
+}
 ul.store {
   margin-left: 130px;
   top: 0;
 }
-img+span {
+img + span {
   width: 50px;
   height: 20px;
   text-align: center;

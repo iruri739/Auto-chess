@@ -22,8 +22,7 @@ export default {
   mutations: {
     [RESQUEST_ARTICLES] (state) {
       axios.get('/game').then(
-        response => {
-         
+        response => { 
           let data = response.data
           state.game = data.game
         }
