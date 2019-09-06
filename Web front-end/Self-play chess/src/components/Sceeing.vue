@@ -3,20 +3,10 @@
     <el-container>
       <div class="block">
         <span class="demonstration"></span>
-        <!-- <el-carousel height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel> -->
       </div>
 
       <div class="block">
         <span class="demonstration"></span>
-        <!-- <el-carousel trigger="click" height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel> -->
       </div>
       <div class="d1">
         <div>
@@ -24,27 +14,27 @@
         </div>
 
         <div class="divcss5">
-          <div class="divcss5-a">
+          <div class="divcss5-g">
             <img src="../assets/touxiang2.jpg" width="140px" height="140px" />
           </div>
-          <div class="divcss5-b">
+
+          <div class="divcss5-h">
             <img src="../assets/touxiang4.jpg" width="140px" height="140px" />
           </div>
           <div class="divcss5-c">
             <font size="7">匹配成功</font>
           </div>
-          <div class="divcss5-e">凹凸凸凹</div>
-          <div class="divcss5-f">霸覇壩灞</div>
+
+          <div class="divcss5-e">{{myName}}</div>
+          <div class="divcss5-f">{{name}}</div>
           <div class="divcss5-d">
             <el-button type="primary" :loading="true">正在进入游戏</el-button>
           </div>
-          <div class="button">
-            <el-button type="button" @click="open">开始战斗</el-button>
-          </div>
+
           <div>
             <div class="textBox">
               <transition name="slide">
-                <p class="text"  :key="text.id">{{text.val}}</p>
+                <p class="text" :key="text.id">{{text.val}}</p>
               </transition>
             </div>
           </div>
@@ -55,12 +45,11 @@
 </template>
 
 <script>
-
+import { clearTimeout } from 'timers';
 export default {
   name: "Sceeing",
   data() {
     return {
-      // visible: false,
       textArr: [
         " 游戏战斗每回合，系统都会随机刷新出五枚棋子。",
         " 每回合都可以花费一定金币购买系统刷新出的棋子。 ",
@@ -70,24 +59,53 @@ export default {
         " 棋子分为海、陆、空三种不同类型，相互之间有制约关系。",
         " 当一局游戏结束后，会开始下一轮，直至玩家生命值为0。"
       ],
-      number: 0
-    }
+      number: 0,
+      set: 3,
+      playerId: "",
+      name: "",
+      myName:""
+    };
   },
   computed: {
     text() {
       return {
         id: this.number,
         val: this.textArr[this.number]
-      }
+      };
     }
   },
   mounted() {
     this.startMove();
+    this.getPlayer();
+    this.timer = setInterval(this.desTimer, 1000);
   },
 
   methods: {
+    desTimer(){
+      this.set -= 1;
+      if(this.set == 0){
+        this.$router.push({ path: "/Home" });
+      }
+    },
+    beforeDestroy() {
+    clearInterval(this.timer);
+},
+    getPlayer() {
+      this.$http
+        .post("http://localhost:8888/game/defaultDataModel?playerId=10")
+        .then(resp => {
+          this.name = resp.data.playerOneData.name;
+          this.myName = resp.data.playerTwoData.name;
+          const _this = this;
+          // timer=setTimeout(function() {
+          //   _this.$router.push({ path: "/Home" });
+          // }, 4000);
+        },
+        );
+    },
+
+    //文字轮播
     startMove() {
-      // eslint-disable-next-line
       let timer = setTimeout(() => {
         if (this.number === 7) {
           this.number = 0;
@@ -96,47 +114,6 @@ export default {
         }
         this.startMove();
       }, 2000); // 滚动不需要停顿则将2000改成动画持续时间
-    },
-    open() {
-      this.$router.push({ path: "/Home" });
-      // this.$confirm("是否退出游戏?", "提示", {
-      //   confirmButtonText: "确定",
-      //   cancelButtonText: "取消",
-      //   type: "warning",
-      //   center: true
-      // })
-      //   .then(() => {
-      //     this.$message({
-      //       type: "success",
-
-      //       message: "退出成功!"
-      //     });
-      //   })
-      //   .catch(() => {
-      //     this.$message({
-      //       type: "info",
-      //       message: "已取消退出"
-      //     });
-      //   });
-    },
-    //几秒后进入跳转页面
-    clickJump() {
-      const timejump = 1;
-      if (!this.timer) {
-        this.count = timejump;
-        this.show = false;
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= timejump) {
-            this.count--;
-          } else {
-            this.show = true;
-             this.timer = null;
-            this.$router.push({ path: "/Home" });
-            clearInterval(this.timer);
-           
-          }
-        }, 3000);
-      }
     }
   }
 };
@@ -151,6 +128,7 @@ export default {
   color: #2c3e50;
   margin-top: 5px;
 }
+
 .d1 {
   position: absolute;
   left: 0px;
@@ -169,16 +147,30 @@ export default {
   background: #bdbdbd;
 }
 /* 定义父级position:relative:绝对定位声明*/
-.divcss5-a {
+.divcss5-g {
   position: absolute;
   margin-left: 50px;
   top: 130px;
 }
+.divcss5-g img {
+  cursor: pointer;
+  transition: all 0.6s;
+}
+.divcss5-g img:hover {
+  transform: scale(1.4);
+}
 /* 使用绝对定位position:absolute样式 并且使用left top进行定位位置 */
-.divcss5-b {
+.divcss5-h {
   position: absolute;
   margin-left: 560px;
   top: 130px;
+}
+.divcss5-h img {
+  cursor: pointer;
+  transition: all 0.6s;
+}
+.divcss5-h img:hover {
+  transform: scale(1.4);
 }
 .divcss5-c {
   position: absolute;
@@ -208,49 +200,6 @@ export default {
   left: 500px;
   top: 280px;
   font-weight: bold;
-}
-.button {
-  position: relative;
-  top: 320px;
-  width: 800px;
-  left: -30px;
-  border: 0px;
-}
- /* .bottom {
-  position: relative;
-  left: 460px;
-  top: 180px;
-  width: 800px;
-  height: 30px;
-  border: 0px;
-}   */
-.textBox {
-  position: relative;
-  left: -10px;
-  top: 320px;
-  width: 800px;
-  height: 30px;
-  border: 0px;
-  
-}
-.text {
-  width: 100%;
-  size: 5px;
-  position: absolute;
-  color:rgb(16, 16, 17);
-  bottom: 0;
-}
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 1s linear;
-}
-.slide-enter {
-  transform: translateY(20px) scale(1);
-  opacity: 1;
-}
-.slide-leave-to {
-  transform: translateY(-20px) scale(0.8);
-  opacity: 0;
 }
 
 /* 使用绝对定位position:absolute样式 并且使用right bottom进行定位位置 */

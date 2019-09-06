@@ -82,7 +82,8 @@ export default {
       valuet5: 42,
       show: false,
       activeName: "first",
-      count:0
+      count:0,
+      ad:""
     };
   },
   methods: {

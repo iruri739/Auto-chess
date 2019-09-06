@@ -10,7 +10,7 @@
         </ul>
         <div class="icon_l">
           <span @click="getShop()" class="iconfont icon-refresh"></span>
-          <span class="iconfont icon-coinyen">{{gold}}</span>
+          <span class="iconfont icon-coinyen">{{glod}}</span>
         </div>
         <div class="icon_r">
           <span class="iconfont icon-close1"></span>
@@ -21,34 +21,37 @@
 </template>
 <script>
 export default {
-  props: ["state2", "glod"],
+  props: ["state2","glod","game"],
   name: "Store",
   data: function() {
     return {
+      // gold: 9,
       Animals: [],
-      bought: [],
-      gold: 0
+      bought: []
+      
     };
   },
   watch: {
     state2() {
-      debugger;
       this.state2;
     },
-    glod: function(newVal, oldVal) {
-      this.gold = newVal;
-    }
+    // glod:function(newVal){
+    //   this.gold=newVal;
+    // }
+
   },
   mounted() {
+
     this.getMockData();
   },
   computed: {},
   methods: {
     getShop() {
-      if (this.gold>= 2) {
-        this.gold -= 2;
+      if (this.glod>= 2) {
+        // this.gold -= 2;
         this.getMockData();
-      } else if (this.gold <= 1) {
+        this.$emit("shopping",2)
+      } else if (this.glod <= 1) {
         alert("金币不足");
       }
     },
@@ -62,13 +65,14 @@ export default {
     },
     buycards(item) {
       if (typeof item.checked == "undefined" || item.checked == false) {
-        if (this.gold >= item.price) {
+        if (this.glod >= item.price) {
           if (!this.bought) {
             this.bought = [];
           }
           this.$emit("buy", item);
+          this.$emit("shopping", item.price)
           this.bought.push(item);
-          this.gold -= item.price;
+          this.glod -= item.price;
           this.$set(item, "checked", true);
         } else {
           alert("金币不足");
@@ -87,7 +91,7 @@ export default {
       return require("../assets/images/" + img + ".jpg");
     },
     getMockData() {
-      this.$http.get("http://localhost:8888/game/getChessData/").then(resp => {
+      this.$http.get("http://localhost:8888/game/getChessData?gameId="+this.game+"&playerId=10").then(resp => {
         this.Animals = resp.data;
       });
     }

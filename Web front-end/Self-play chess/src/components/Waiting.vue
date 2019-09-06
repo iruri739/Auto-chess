@@ -1,21 +1,23 @@
 <template>
   <div id="Waiting">
     <el-container>
-      
-
       <div class="block">
         <span class="demonstration"></span>
       </div>
 
       <div class="block">
         <span class="demonstration"></span>
-
       </div>
-      <div class="d1">
+
+        
+      <div class="d1">      
         <div>
-          <img src="../assets/timg.jpg" width="100%" height="700px" />
+          <img src="../assets/timg.jpg" width="100%" height="720px" />
         </div>
-
+      <!-- <video id="video" autoplay loop muted="true">
+          <source src="../assets/background.mp4" type="video/mp4">
+        </video> -->
+ 
         <div class="divcss5">
           <div class="divcss5-a">
             <img src="../assets/touxiang2.jpg" width="140px" height="140px" />
@@ -23,19 +25,39 @@
           <div class="divcss5-b">
             <img src="../assets/touxiang.jpg" width="140px" height="140px" />
           </div>
-          <div class="divcss5-c">
-            <font size="7">匹配中...</font>
-          </div>
-          <div class="divcss5-e">凹凸凸凹</div>
-          <div class="divcss5-f"></div>
-          <div class="divcss5-d">
-            <el-button type="primary" :loading="true">寻找势均力敌的玩家</el-button>
+
+<link rel="stylesheet" href="bootstrap.min.css">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="preloader">
+                <div class="loader loader-inner-1">
+                    <div class="loader loader-inner-2">
+                        <div class="loader loader-inner-3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+          <div class="text-effect">
+            <span>匹</span>
+            <span>配</span>
+            <span>中</span>
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
           </div>
           <div class="button">
             <el-button type="button" @click="open">取消匹配</el-button>
           </div>
-
-          <!-- <div class="prompt_text">群发创建失败，<span id="num">{{count}}</span>秒后转至群发记录</div> -->
+          <div class="divcss5-e"></div>
+          <div class="divcss5-f"></div>
+          <div class="divcss5-d">
+            <el-button type="primary" :loading="true">寻找势均力敌的玩家</el-button>
+          </div>
 
           <div>
             <div class="textBox">
@@ -44,32 +66,23 @@
               </transition>
             </div>
           </div>
-          
-          <div class="pic">
-        <img :src="now" />
-          </div>
 
+          <div class="pic">
+            <img :src="now" />
+          </div>
         </div>
       </div>
+
     </el-container>
   </div>
 </template>
 <script>
-import { clearTimeout } from 'timers';
-import { close } from 'fs';
-// import touxiang1 from '@/assets/touxiang1.jpg';
-// import touxiang2 from '@/assets/touxiang2.jpg';
-// import touxiang3 from '@/assets/touxiang3.jpg';
-// import touxiang4 from '@/assets/touxiang4.jpg';
-// import touxiang5 from '@/assets/touxiang5.jpg';
-// import touxiang6 from '@/assets/touxiang6.jpg';
-// import touxiang7 from '@/assets/touxiang7.jpg';
-// import touxiang8 from '@/assets/touxiang8.jpg';
+import { clearTimeout, clearInterval } from "timers";
+import { watch } from 'fs';
 export default {
   name: "Waiting",
   data() {
     return {
-      // visible: false,
       textArr: [
         " 游戏战斗每回合，系统都会随机刷新出五枚棋子。",
         " 每回合都可以花费一定金币购买系统刷新出的棋子。 ",
@@ -80,18 +93,14 @@ export default {
         " 当一局游戏结束后，会开始下一轮，直至玩家生命值为0。"
       ],
       number: 0,
-       sec: 6,
+      bool:false,
+      
     };
   },
-  // created() {   
-  //   this.timer = setInterval(this.descTimer, 1000);
-  // },
+
   computed: {
     text() {
       return {
-        //      img:[
-        //   touxiang1,touxiang2,touxiang3,touxiang4,touxiang5,touxiang6,touxiang7,touxiang8
-        // ],
         id: this.number,
         val: this.textArr[this.number]
       };
@@ -99,54 +108,69 @@ export default {
   },
   mounted() {
     this.startMove();
-    this.timer = setInterval(this.descTimer, 1000);
+    this.getTimer()
   },
-
+//     beforeDestroy() {
+//     clearInterval(this.time);
+//      this.time = null;
+// },
   methods: {
-    descTimer() {
-      this.sec -= 1;
-      if (this.sec == 0) {
-        debugger
-            this.$router.push({ path: "/Sceeing"});
-      }    
+    //轮询发送匹配请求
+    getTimer(){     
+       time=setInterval(()=>{          
+          this.$http.get('http://localhost:8888/game/matchGame?playerId=10').then(resp => {
+           this.bool=resp.data;
+           
+           }) ; 
+           if(this.bool==true){   
+           this.$router.push({ path: "/Sceeing" }); 
+              window.clearInterval(time); 
+             }
+         },1000)
+          function stop(){
+        window.clearInterval(time);
+    }
     },
-
-  
-
-
-    startMove() {
-      // eslint-disable-next-line
-      let timer = setTimeout(() => {
+    
+    //文字轮播
+    startMove() {      
+      setTimeout(() => {
         if (this.number === 7) {
           this.number = 0;
         } else {
           this.number += 1;
         }
         this.startMove();
-      }, 2000); // 滚动不需要停顿则将2000改成动画持续时间
+      }, 3000); // 滚动不需要停顿则将2000改成动画持续时间
     },
+
     open() {
       this.$confirm("是否退出游戏?", "提示", {
-        confirmButtonText: "取消",
-        cancelButtonText: "确定",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
         type: "warning",
         center: true
       })
-        .then(() => {
+       .then(() => {
+           this.$router.push({ path: "/Meenu" });    
+        window.clearInterval(time);
+            this.$message({
+            type: "success",
+            message: "退出成功!"
+          });
+
+        })
+        .catch(() => {
           this.$message({
             type: "info",
             message: "已取消退出"
-          });        
-        })
-        .catch(() => {
-          
-          this.$router.push({ path: "/"});
-          clearTimeout();
-          
+          });
         });
-    },
+    }
   }
 };
+
+var time;
 </script>
 
 <style>
@@ -158,6 +182,14 @@ export default {
   color: #2c3e50;
   margin-top: 5px;
 }
+.video{
+  position: absolute;
+  left: 0px;
+  top: -30px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 .d1 {
   position: absolute;
   left: 0px;
@@ -166,6 +198,7 @@ export default {
   height: 100%;
   z-index: -1;
 }
+
 .divcss5 {
   position: relative;
   left: 330px;
@@ -181,24 +214,31 @@ export default {
   margin-left: 50px;
   top: 130px;
 }
+.divcss5-a img {
+  cursor: pointer;
+  transition: all 0.6s;
+}
+.divcss5-a img:hover {
+  transform: scale(1.4);
+}
 /* 使用绝对定位position:absolute样式 并且使用left top进行定位位置 */
 .divcss5-b {
   position: absolute;
   margin-left: 560px;
   top: 130px;
 }
-.divcss5-c {
-  position: absolute;
-  width: 250px;
-  height: 80px;
-  left: 260px;
-  top: 160px;
-  font-weight: bold;
+.divcss5-b img {
+  cursor: pointer;
+  transition: all 0.6s;
 }
+.divcss5-b img:hover {
+  transform: scale(1.4);
+}
+
 .divcss5-d {
   position: absolute;
   top: 10%;
-  left: 38%;
+  left: 32%;
 }
 .divcss5-e {
   position: absolute;
@@ -216,25 +256,89 @@ export default {
   top: 280px;
   font-weight: bold;
 }
+.text-effect {
+  color: #fff;
+  font-size: 50px;
+  font-weight: 700;
+  position: relative;
+  left: 30px;
+  top: 160px;
+}
+.text-effect span {
+  animation: animate linear 2000ms infinite;
+}
+.text-effect span:nth-child(1n) {
+  animation-delay: 0s;
+}
+.text-effect span:nth-child(2n) {
+  animation-delay: 100ms;
+}
+.text-effect span:nth-child(3n) {
+  animation-delay: 200ms;
+}
+.text-effect span:nth-child(4n) {
+  animation-delay: 300ms;
+}
+.text-effect span:nth-child(5n) {
+  animation-delay: 400ms;
+}
+.text-effect span:nth-child(6n) {
+  animation-delay: 500ms;
+}
+.text-effect span:nth-child(7n) {
+  animation-delay: 600ms;
+}
+.text-effect span:nth-child(8n) {
+  animation-delay: 700ms;
+}
+.text-effect span:nth-child(9n) {
+  animation-delay: 800ms;
+}
+.text-effect span:nth-child(10n) {
+  animation-delay: 900ms;
+}
+@keyframes animate {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 80px Red, 0 0 30px orange, 0 0 6px DarkRed;
+  }
+}
+@media only screen and (max-width: 990px) {
+  .text-effect {
+    font-size: 65px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .text-effect {
+    font-size: 50px;
+  }
+}
+@media only screen and (max-width: 479px) {
+  .text-effect {
+    font-size: 36px;
+  }
+}
+@media only screen and (max-width: 359px) {
+  .text-effect {
+    font-size: 27px;
+  }
+}
+
 .button {
   position: relative;
-  top: 320px;
-  width: 800px;
-  left: -30px;
   border: 0px;
+  top: 250px;
+  width: 800px;
+  left: -32px;
 }
-/* .bottom {
-  position: relative;
-  left: 460px;
-  top: 180px;
-  width: 800px;
-  height: 30px;
-  border: 0px;
-} */
+
 .textBox {
-  position: relative;
+  position: absolute;
   left: -10px;
-  top: 340px;
+  top: 90%;
   width: 800px;
   height: 30px;
   border: 0px;
@@ -258,6 +362,54 @@ export default {
   transform: translateY(-20px) scale(0.8);
   opacity: 0;
 }
-
 /* 使用绝对定位position:absolute样式 并且使用right bottom进行定位位置 */
+/* 加载动画 */
+.preloader{
+   position: absolute;
+   top:2%;
+   left:10%;
+    padding: 10px 0 10px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    perspective: 500;
+}
+.loader{
+    text-align: center;
+    margin: 5px;
+    border-radius: 50%;
+    border: 3px solid rgb(83, 62, 62);
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    position: relative;
+}
+.loader-inner-1{
+    animation-delay: 0.2s;
+    animation: change_first_circle 2s ease-in-out infinite;
+}
+.loader-inner-2{
+    animation-delay: 0.2s;
+    animation: change_second_circle 2s ease-in-out infinite;
+}
+.loader-inner-3{
+    animation-delay: 0.2s;
+    width: 50px;
+    height: 50px;
+    animation: change_last_circle 3s linear  infinite;
+}
+@keyframes change_first_circle {
+    50%{ transform: rotateX(360deg) scale(0.8); }
+}
+@keyframes change_second_circle {
+    50%{ transform: rotateY(360deg) scale(0.8); }
+}
+@keyframes change_last_circle {
+    50%{ transform: rotateX(360deg) scale(0.8); }
+}
 </style>

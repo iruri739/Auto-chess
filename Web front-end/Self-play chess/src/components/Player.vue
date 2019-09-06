@@ -75,7 +75,7 @@ import draggable from "vuedraggable";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
-  props: ["animals", "val"],
+  props: ["animals","val"],
   components: {
     draggable,
     Prepare
@@ -83,6 +83,7 @@ export default {
   data() {
     return {
       list2: [],
+      list:[],
       editable: true,
       isDragging: false,
       delayedDragging: false
@@ -91,11 +92,10 @@ export default {
   mounted() {
     this.fetchData();
   },
-
   methods: {
     ...mapActions({
-      fetchData: "fetchArticlesData"
-    }),
+      fetchData: "fetchGameData"
+    }), 
     getImage(imgName) {
       var img = imgName;
 
@@ -111,7 +111,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      articles: "getArticles"
+     game: "getGame"
     }),
     dragOptions() {
       return {
@@ -127,12 +127,16 @@ export default {
     list2String() {
       return JSON.stringify(this.list2, null, 2);
     },
-    list: function() {
-      return this.animals;
-    }
+    // list: function() {
+       
+    //   return this.animals;
+    // }
   },
 
   watch: {
+     animals: function(newVal, oldVal) {
+      this.list = newVal;
+    },
     isDragging(newValue) {
       if (newValue) {
         this.delayedDragging = true;

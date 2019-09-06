@@ -25,29 +25,27 @@
         </ul>
 
         <div class="bottom">
-        
           <div>
             <div :style="aa" ref="descTimer"></div>
           </div>
         </div>
       </div>
     </div>
-     <el-dialog title="游戏结束" :visible.sync="gameVisible" width="30%" :before-close="handleClose">
+    <!-- <el-dialog title="游戏结束" :visible.sync="gameVisible" width="30%" :before-close="handleClose">
       <span>{{result}}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="gameVisible = false">取 消</el-button>
         <el-button type="primary" @click="gameVisible = false">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script type="text/ecmascript-6">
-import img from "@/assets/imgs/ling.jpg"
+import img from "@/assets/imgs/ling.jpg";
 
 export default {
-  
   name: "Menu",
-   props:['glod','number'],
+  props: ["glod", "number"],
   data: function() {
     return {
       li1: "准备中",
@@ -63,14 +61,12 @@ export default {
       flg: true,
       Bstate: true,
       Pstate: false,
+      aa: ""
     };
   },
   created() {
     this.timer = setInterval(this.startTimer, 1000);
     this.timer = setInterval(this.descTimer, 1000);
-  },
-  mounted() {
-    this.add();
   },
   destroyed() {
     clearInterval(this.timer);
@@ -88,30 +84,29 @@ export default {
         ":" +
         (this.seconds < 10 ? "0" + this.seconds : this.seconds);
     },
-    
+
     descTimer() {
       this.sec -= 1;
       if (this.sec == 0) {
-          if (this.flg) {
-            debugger
-            this.$emit("aaa",this.Bstate,this.Pstate),
+        if (this.flg) {
+          
+          this.$emit("aaa", this.Bstate, this.Pstate),
             (this.aa = "color:red"),
             (this.li1 = "战斗中"),
             (this.li2 = "战斗回合"),
-            (this.sec = 60)
-          } else {
-            debugger
-            this.Bstate=true,this.Pstate=false
-            this.$emit("aaa",this.Pstate,this.Bstate),
+            (this.sec = 60);
+        } else {
+         
+          (this.Bstate = true), (this.Pstate = false);
+          this.$emit("aaa", this.Pstate, this.Bstate),
             (this.aa = "color:white"),
-              (this.li1 = "准备中"),
-              (this.li2 = "准备回合"),
-              (this.sec = 30);
-          }
-          this.flg = !this.flg;
-          
+            (this.li1 = "准备中"),
+            (this.li2 = "准备回合"),
+            (this.sec = 30);
+        }
+        this.flg = !this.flg;
       }
-      
+
       // descTimer() {
       // this.sec -= 1;
       // if (this.sec == 0) {
@@ -152,11 +147,11 @@ export default {
       //             clearInterval(this.descTimer);
       //           }
       //         }
-      //       }); 
-         
+      //       });
+
       //    }
       //     this.flg = !this.flg;
-          
+
       // }
       this.$refs.descTimer.innerHTML =
         this.sec < 10 ? "0" + this.sec : this.sec;
