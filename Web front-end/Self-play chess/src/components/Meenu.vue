@@ -10,12 +10,7 @@
     </el-carousel-item>
 </el-carousel> 
  </el-container>
-
-  
   <UserView></UserView>
-  
-
-
     <el-container>
       <div>
       <el-container>
@@ -26,14 +21,10 @@
                                 <em class="em_1"></em>
                                 <em class="em_2"></em>
                             </a>
-                        </div>
-          
-          
+                        </div>     
         </el-button>
       </el-container>
       </div>
-
-
       <div>
       <el-container>
         <el-button id="campus-home-btn-group1" @click="quitGame" plain>
@@ -44,8 +35,6 @@
                                 <em class="em_2"></em>
                             </a>
                         </div>
-          
-          
         </el-button>
       </el-container>
       </div>

@@ -42,7 +42,6 @@
 </template>
 <script type="text/ecmascript-6">
 import img from "@/assets/imgs/ling.jpg";
-
 export default {
   name: "Menu",
   props: ["glod", "number"],
@@ -87,6 +86,7 @@ export default {
 
   descTimer() {
       this.sec -= 1;
+      this.$emit("getSec",this.sec)
       if (this.sec == 0) {
         if (this.flg) {
           

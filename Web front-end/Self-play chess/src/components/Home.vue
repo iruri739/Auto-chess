@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <Draglo></Draglo>
-    <Menu @aaa="aaa" :glod="player.playerOneData.gold" :number="player.playerOneData.winCount"></Menu>
-    <Prepare  :id="playerId"   :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
-    <Battle :state1="Bstate"></Battle>
-    <Player :animals="Animals" :val="player.playerOneData.hp"></Player>
+    <Menu  @getSec="gettime" @aaa="aaa" :glod="player.playerOneData.gold" :number="player.playerOneData.winCount"></Menu>
+    <Prepare :id="playerId"  :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
+    <Battle  :state1="Bstate"></Battle>
+    <Player :sec="sec" :animals="Animals" :val="player.playerOneData.hp"></Player>
   </div>
 </template>
 
@@ -34,7 +34,9 @@ export default {
       Pstate: true,
       Bstate: false,
       playerId: 0,
-      player: {}
+      player: {},
+      sec:0
+
     };
   },
   mounted() {
@@ -44,6 +46,9 @@ export default {
     this.getRouterData()
   },
   methods: {
+    gettime(value){
+      this.sec=value;
+    },
     getRouterData() {
       this.playerId = this.$route.query.id
       console.log('id', this.playerId)

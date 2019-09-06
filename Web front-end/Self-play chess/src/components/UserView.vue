@@ -18,8 +18,6 @@
             </div>
         </div>
         </div>
-  
-    
     <Gonggao class="yuan"> </Gonggao>
     
 </el-container>
@@ -59,10 +57,10 @@ export default {
         margin: 0%;
         padding: 0%;
     }
-    #View{
+    /* #View{
       height: 450px;
         
-    }
+    } */
     #w4{
      width: 248px;
      height: 500px;
@@ -77,7 +75,6 @@ export default {
     display: table;
      margin:0% auto;
      padding: 10px;
- 
      text-align: left;
     }
     h1{
@@ -88,7 +85,7 @@ export default {
         line-height:2em;
     }
     .yuan{
- width: 650px;
+     width: 650px;
     background:#fcf9f8;
      opacity: 0.8;
 
@@ -117,7 +114,6 @@ export default {
      margin-left: 50px;
      margin-right: 50px;
      background-image: url("../assets/images/playerlist.jpg");
-     margin-top:-50px; 
-      
+     margin-top:-50px;     
     }
 </style>

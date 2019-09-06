@@ -24,6 +24,7 @@
           <div class="title">
             <img src="../assets/touxiang2.jpg" alt/>
           </div>
+          <p>{{sec}}</p>
           <div class="blood">
             <meter
               min="0"
@@ -75,7 +76,7 @@ import draggable from "vuedraggable";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
-  props: ["animals","val"],
+  props: ["animals","val","sec"],
   components: {
     draggable,
     Prepare
@@ -84,6 +85,7 @@ export default {
     return {
       list2: [],
       list:[],
+      
       editable: true,
       isDragging: false,
       delayedDragging: false
@@ -227,7 +229,6 @@ export default {
   opacity: 0.6;
   margin: 15px auto;
 }
-
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
