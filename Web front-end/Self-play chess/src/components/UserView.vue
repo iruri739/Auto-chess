@@ -44,10 +44,8 @@ export default {
   },
 
   methods: {
-
     getOnlineUserList() {
-      this.axios.get("http://localhost:8888/user/onlineUserList").then(resp => {
-          console.log(resp);
+      this.axios.get("http://localhost:8888/user/onlineUserList").then(resp => {   
           this.UserList = resp.data.userlist;
       });
     }

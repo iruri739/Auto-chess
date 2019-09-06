@@ -246,7 +246,8 @@ export default {
         name: [
           { required: true, message: "用户名输入不正确", trigger: "blur" },
           { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" },
-          { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '只能输入中文和英文'}
+          { pattern: /^[A-Za-z0-9]+$/, message: '只能输入数字和英文'}
+          //{ pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '只能输入中文和英文'}
         ],
         password:[
           { required: true, message: "请输入密码", trigger: "blur" }
@@ -280,8 +281,13 @@ export default {
             "userPwd": this.regform.password  
              } ).then(resp => {
              alert(resp.data);
-              if(resp.data==true){
-                 this.$router.push({ path: "/Meenu" });
+              if(resp.data!=0){
+                 this.$router.push({ 
+                   name: "Meenu" ,
+                   query:{
+                     id:resp.data
+                   }
+                   });
              }
        
       });
@@ -304,9 +310,14 @@ export default {
             
           // var result =
              this.$http.get('http://localhost:8888/user/login?userName='+username+'&userPwd='+password).then(resp => {
-                if(resp.data==true){
-                     
-                 this.$router.push({ path: "/Meenu"});
+                
+                if(resp.data!=0){
+                 this.$router.push({ 
+                   name: "Meenu" ,
+                   query:{
+                     id:resp.data
+                   }
+                   });
              }
 })       
  

@@ -46,6 +46,7 @@
 
 <script>
 import { clearTimeout } from 'timers';
+// import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Sceeing",
   data() {
@@ -61,12 +62,22 @@ export default {
       ],
       number: 0,
       set: 3,
-      playerId: "",
+      playerId: 0,
       name: "",
-      myName:""
+      myName:"",
+      player:{}
     };
   },
   computed: {
+    //  ...mapGetters({
+    //  game: "getGame"
+    // }),
+    // ...mapGetters({
+    //  player1: "getPlayer1"
+    // }),
+    // ...mapGetters({
+    //  player2: "getPlayer2"
+    // }),
     text() {
       return {
         id: this.number,
@@ -79,12 +90,33 @@ export default {
     this.getPlayer();
     this.timer = setInterval(this.desTimer, 1000);
   },
-
+ created() {
+    this.getRouterData()
+  },
   methods: {
+    // ...mapActions({
+    //   fetchGameData: "fetchGameData"
+    // }),
+    // ...mapActions({
+    //   fetchPlayer1Data: "fetchPlayer1Data"
+    // }),
+    // ...mapActions({
+    //   fetchPlayer2Data: "fetchPlayer2Data"
+    // }),
+     getRouterData() {
+      this.playerId = this.$route.query.id
+      console.log('id', this.playerId)
+     },
     desTimer(){
       this.set -= 1;
       if(this.set == 0){
-        this.$router.push({ path: "/Home" });
+           this.$router.push({ 
+                   name: "Home" ,
+                   query:{
+                     id:this.playerId
+                   }
+                   });
+       // this.$router.push({ path: "/Home" });
       }
     },
     beforeDestroy() {
@@ -92,16 +124,21 @@ export default {
 },
     getPlayer() {
       this.$http
-        .post("http://localhost:8888/game/defaultDataModel?playerId=10")
+        .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
         .then(resp => {
+
           this.name = resp.data.playerOneData.name;
           this.myName = resp.data.playerTwoData.name;
+          this.player=resp.data
           const _this = this;
           // timer=setTimeout(function() {
           //   _this.$router.push({ path: "/Home" });
           // }, 4000);
         },
         );
+        // this.fetchGameData(this.player.game);
+        // this.fetchPlayer1Data(this.player.player1);
+        // this.fetchPlayer2Data(this.player.player2);
     },
 
     //文字轮播

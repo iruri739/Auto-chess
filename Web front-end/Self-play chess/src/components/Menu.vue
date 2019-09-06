@@ -57,7 +57,7 @@ export default {
       minutes: 0,
       seconds: 0,
       min: 0,
-      sec: 40,
+      sec: 30,
       flg: true,
       Bstate: true,
       Pstate: false,
@@ -73,7 +73,7 @@ export default {
   },
 
   methods: {
-    startTimer() {
+  startTimer() {
       this.seconds += 1;
       if (this.seconds >= 60) {
         this.seconds = 0;
@@ -85,7 +85,7 @@ export default {
         (this.seconds < 10 ? "0" + this.seconds : this.seconds);
     },
 
-    descTimer() {
+  descTimer() {
       this.sec -= 1;
       if (this.sec == 0) {
         if (this.flg) {
@@ -96,7 +96,6 @@ export default {
             (this.li2 = "战斗回合"),
             (this.sec = 60);
         } else {
-         
           (this.Bstate = true), (this.Pstate = false);
           this.$emit("aaa", this.Pstate, this.Bstate),
             (this.aa = "color:white"),
@@ -130,21 +129,21 @@ export default {
       //       .then(resp => {
       //         // alert(resp .data);
       //         {
-      //           if (resp.data === "continue") {
+      //           if (resp.data === "true") {
       //             (this.Bstate = true), (this.Pstate = false);
       //             this.$emit("aaa", this.Pstate, this.Bstate),
       //               (this.aa = "color:white"),
       //               (this.li1 = "准备中"),
       //               (this.li2 = "准备回合"),
       //               (this.sec = 30);
-      //           } else if (resp.data === "true") {
+      //           } else if (resp.data === "win") {
       //             this.gameVisible = true;
       //             this.result = "恭喜您赢得本局游戏";
-      //             clearInterval(this.descTimer);
-      //           } else {
+      //             windows.clearInterval(this.descTimer);
+      //           } else if(resp.data === "lose"){
       //             this.gameVisible = true;
       //             this.result = "很遗憾您输了";
-      //             clearInterval(this.descTimer);
+      //             windows.clearInterval(this.descTimer);
       //           }
       //         }
       //       });

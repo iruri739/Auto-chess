@@ -60,9 +60,7 @@ import img3 from "@/assets/imgs/3.jpg";
 import img4 from "@/assets/imgs/4.jpg";
 import img5 from "@/assets/imgs/5.jpg";
 import UserView from './UserView'
-// import Carousel from "./Carousel.vue";
-// import img6 from '@/assets/imgs/logo.jpg';
- import img9 from '@/assets/imgs/background4.jpg';
+import img9 from '@/assets/imgs/background4.jpg';
 export default {
   name: "Meenu",
   components: {
@@ -73,12 +71,26 @@ export default {
   // },
    data: function() {
     return {
-      img: [img1, img2, img3,  img4, img5]
+      img: [img1, img2, img3,  img4, img5],
+      id:0
     };
   },
+   created() {
+    this.getRouterData()
+  },
   methods: {
+     getRouterData() {
+      this.id = this.$route.query.id
+      console.log('id', this.id)
+    },
     startGames: function() {
-        this.$router.push({ path: "/Waiting"});
+         this.$router.push({ 
+                   name: "Waiting" ,
+                   query:{
+                     id:this.id
+                   }
+                   });
+        // this.$router.push({ path: "/Waiting"});
     },
     quitGame: function() {
         this.$confirm('即将退出游戏！是否继续?', '提示', {

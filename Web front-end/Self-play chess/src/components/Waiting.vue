@@ -9,15 +9,14 @@
         <span class="demonstration"></span>
       </div>
 
-        
-      <div class="d1">      
+      <div class="d1">
         <div>
           <img src="../assets/timg.jpg" width="100%" height="720px" />
         </div>
-      <!-- <video id="video" autoplay loop muted="true">
+        <!-- <video id="video" autoplay loop muted="true">
           <source src="../assets/background.mp4" type="video/mp4">
-        </video> -->
- 
+        </video>-->
+
         <div class="divcss5">
           <div class="divcss5-a">
             <img src="../assets/touxiang2.jpg" width="140px" height="140px" />
@@ -26,21 +25,20 @@
             <img src="../assets/touxiang.jpg" width="140px" height="140px" />
           </div>
 
-<link rel="stylesheet" href="bootstrap.min.css">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="preloader">
-                <div class="loader loader-inner-1">
+          <link rel="stylesheet" href="bootstrap.min.css" />
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="preloader">
+                  <div class="loader loader-inner-1">
                     <div class="loader loader-inner-2">
-                        <div class="loader loader-inner-3">
-                        </div>
+                      <div class="loader loader-inner-3"></div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-</div>
+          </div>
 
           <div class="text-effect">
             <span>匹</span>
@@ -72,13 +70,12 @@
           </div>
         </div>
       </div>
-
     </el-container>
   </div>
 </template>
 <script>
 import { clearTimeout, clearInterval } from "timers";
-import { watch } from 'fs';
+import { watch } from "fs";
 export default {
   name: "Waiting",
   data() {
@@ -93,47 +90,62 @@ export default {
         " 当一局游戏结束后，会开始下一轮，直至玩家生命值为0。"
       ],
       number: 0,
-      bool:false,
-      
+      bool: false,
+      playerId: 0
     };
   },
 
   computed: {
+   
     text() {
       return {
         id: this.number,
         val: this.textArr[this.number]
       };
-    }
+    },
+    
+  },
+  created() {
+    this.getRouterData();
   },
   mounted() {
     this.startMove();
-    this.getTimer()
-  },
-//     beforeDestroy() {
-//     clearInterval(this.time);
-//      this.time = null;
-// },
-  methods: {
-    //轮询发送匹配请求
-    getTimer(){     
-       time=setInterval(()=>{          
-          this.$http.get('http://localhost:8888/game/matchGame?playerId=10').then(resp => {
-           this.bool=resp.data;
-           
-           }) ; 
-           if(this.bool==true){   
-           this.$router.push({ path: "/Sceeing" }); 
-              window.clearInterval(time); 
-             }
-         },1000)
-          function stop(){
-        window.clearInterval(time);
-    }
-    },
+    this.getTimer();
     
+  },
+  methods: {
+    
+    getRouterData() {
+      this.playerId = this.$route.query.id;
+      console.log("id", this.playerId);
+    },
+    //轮询发送匹配请求
+    getTimer() {
+      time = setInterval(() => {
+        this.$http
+          .get("http://localhost:8888/game/matchGame?playerId=" + this.playerId)
+          .then(resp => {
+            this.bool = resp.data;
+          });
+        if (this.bool == true) {
+          //this.$router.push({ path: "/Sceeing" });
+          this.$router.push({
+            name: "Sceeing",
+            query: {
+              id: this.playerId
+            }
+          });
+
+          window.clearInterval(time);
+        }
+      }, 1000);
+      function stop() {
+        window.clearInterval(time);
+      }
+    },
+
     //文字轮播
-    startMove() {      
+    startMove() {
       setTimeout(() => {
         if (this.number === 7) {
           this.number = 0;
@@ -151,14 +163,13 @@ export default {
         type: "warning",
         center: true
       })
-       .then(() => {
-           this.$router.push({ path: "/Meenu" });    
-        window.clearInterval(time);
-            this.$message({
+        .then(() => {
+          this.$router.push({ path: "/Meenu" });
+          window.clearInterval(time);
+          this.$message({
             type: "success",
             message: "退出成功!"
           });
-
         })
         .catch(() => {
           this.$message({
@@ -182,7 +193,7 @@ var time;
   color: #2c3e50;
   margin-top: 5px;
 }
-.video{
+.video {
   position: absolute;
   left: 0px;
   top: -30px;
@@ -364,52 +375,58 @@ var time;
 }
 /* 使用绝对定位position:absolute样式 并且使用right bottom进行定位位置 */
 /* 加载动画 */
-.preloader{
-   position: absolute;
-   top:2%;
-   left:10%;
-    padding: 10px 0 10px;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    perspective: 500;
+.preloader {
+  position: absolute;
+  top: 2%;
+  left: 10%;
+  padding: 10px 0 10px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  perspective: 500;
 }
-.loader{
-    text-align: center;
-    margin: 5px;
-    border-radius: 50%;
-    border: 3px solid rgb(83, 62, 62);
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    transform-style: preserve-3d;
-    position: relative;
+.loader {
+  text-align: center;
+  margin: 5px;
+  border-radius: 50%;
+  border: 3px solid rgb(83, 62, 62);
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  position: relative;
 }
-.loader-inner-1{
-    animation-delay: 0.2s;
-    animation: change_first_circle 2s ease-in-out infinite;
+.loader-inner-1 {
+  animation-delay: 0.2s;
+  animation: change_first_circle 2s ease-in-out infinite;
 }
-.loader-inner-2{
-    animation-delay: 0.2s;
-    animation: change_second_circle 2s ease-in-out infinite;
+.loader-inner-2 {
+  animation-delay: 0.2s;
+  animation: change_second_circle 2s ease-in-out infinite;
 }
-.loader-inner-3{
-    animation-delay: 0.2s;
-    width: 50px;
-    height: 50px;
-    animation: change_last_circle 3s linear  infinite;
+.loader-inner-3 {
+  animation-delay: 0.2s;
+  width: 50px;
+  height: 50px;
+  animation: change_last_circle 3s linear infinite;
 }
 @keyframes change_first_circle {
-    50%{ transform: rotateX(360deg) scale(0.8); }
+  50% {
+    transform: rotateX(360deg) scale(0.8);
+  }
 }
 @keyframes change_second_circle {
-    50%{ transform: rotateY(360deg) scale(0.8); }
+  50% {
+    transform: rotateY(360deg) scale(0.8);
+  }
 }
 @keyframes change_last_circle {
-    50%{ transform: rotateX(360deg) scale(0.8); }
+  50% {
+    transform: rotateX(360deg) scale(0.8);
+  }
 }
 </style>

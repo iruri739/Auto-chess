@@ -2,7 +2,7 @@
   <div class="container">
     <Draglo></Draglo>
     <Menu @aaa="aaa" :glod="player.playerOneData.gold" :number="player.playerOneData.winCount"></Menu>
-    <Prepare :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
+    <Prepare  :id="playerId"   :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
     <Battle :state1="Bstate"></Battle>
     <Player :animals="Animals" :val="player.playerOneData.hp"></Player>
   </div>
@@ -33,19 +33,25 @@ export default {
       img,
       Pstate: true,
       Bstate: false,
-      playerId: 1,
+      playerId: 0,
       player: {}
     };
   },
   mounted() {
     this.getPlayer();
   },
+  created() {
+    this.getRouterData()
+  },
   methods: {
+    getRouterData() {
+      this.playerId = this.$route.query.id
+      console.log('id', this.playerId)
+     },
     getPlayer() {
       this.$http
-        .post("http://localhost:8888/game/defaultDataModel?playerId=10")
+        .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
         .then(resp => {
-          
           this.player =resp.data;
           console.log(this.player);
         });

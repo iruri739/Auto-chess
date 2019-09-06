@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  props: ["state2","glod","game"],
+  props: ["state2","glod","game",'id'],
   name: "Store",
   data: function() {
     return {
@@ -91,7 +91,7 @@ export default {
       return require("../assets/images/" + img + ".jpg");
     },
     getMockData() {
-      this.$http.get("http://localhost:8888/game/getChessData?gameId="+this.game+"&playerId=10").then(resp => {
+      this.$http.get("http://localhost:8888/game/getChessData?gameId="+this.game+"&playerId="+this.id).then(resp => {
         this.Animals = resp.data;
       });
     }
