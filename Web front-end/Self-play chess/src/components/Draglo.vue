@@ -173,8 +173,5 @@ this.show = !this.show;
 .voiceSetting{
   margin-left:10px;
 }
-
-
-
 </style>
 

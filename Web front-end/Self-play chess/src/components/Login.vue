@@ -220,7 +220,7 @@ export default {
   
   data() {
     return {
-
+         id:0,
      centerDialogVisible: false,
      centerDialogVisibleq: false,
     
@@ -307,19 +307,44 @@ export default {
           if (valid) {
             var username = this.ruleForm.name;
             var password = this.ruleForm.password;
-            
-          // var result =
-             this.$http.get('http://localhost:8888/user/login?userName='+username+'&userPwd='+password).then(resp => {
-                
-                if(resp.data!=0){
+             this.$http.get('http://localhost:8888/user/login?userName='+username+'&userPwd='+password).then(resp => {  
+                this.id=resp.data
+              alert(resp.data)
+              })
+                if(this.id!=0){
+                 this.$http.get('http://localhost:8888/user/check?userId='+this.id).then(resp => {
+
+             if(resp.data=true){
+                  this.$router.push({ 
+                   name: "Home" ,
+                   query:{
+                     id:this.id
+                   }
+                   });
+             }else{
                  this.$router.push({ 
                    name: "Meenu" ,
                    query:{
-                     id:resp.data
+                     id:this.id
                    }
                    });
              }
-})       
+
+
+
+    })        
+                                     
+                                     }
+            //     if(resp.data!=0){
+            //      this.$router.push({ 
+            //        name: "Meenu" ,
+            //        query:{
+            //          id:resp.data
+            //        }
+            //        });
+            //  }
+       
+
  
     }
         
