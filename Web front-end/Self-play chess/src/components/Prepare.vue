@@ -21,20 +21,37 @@
 </template>
 <script>
 export default {
-  props: ["state2","glod","game",'id'],
+  props: ["state2","glod","game",'id',"sec"],
   name: "Store",
   data: function() {
     return {
-      // gold: 9,
+     
       Animals: [],
-      bought: []
-      
+      bought: [],
+      count:0
     };
   },
   watch: {
     state2() {
       this.state2;
     },
+  sec:function(newVal,oldval){ 
+      if(this.sec==1){
+        this.axios
+            .post("http://localhost:8888/game/updateHandCards", {
+              gameId: this.game,
+              playerId: this.id,
+              Cards: this.bought
+            })
+            .then(response => {
+              console.log(response.data);  
+            });
+
+
+
+      }
+
+  }
     // glod:function(newVal){
     //   this.gold=newVal;
     // }
@@ -64,6 +81,10 @@ export default {
       }
     },
     buycards(item) {
+      
+         if(this.count<9){
+
+         
       if (typeof item.checked == "undefined" || item.checked == false) {
         if (this.glod >= item.price) {
           if (!this.bought) {
@@ -74,11 +95,15 @@ export default {
           this.bought.push(item);
           this.glod -= item.price;
           this.$set(item, "checked", true);
+          this.count++
         } else {
           alert("金币不足");
           this.bought = this.deletcard(this.bought, item);
         }
       } 
+      }else{
+        alert("牌库已满")
+      }
       // else {
       //   item.checked = !item.checked;
       //   this.gold += item.price;

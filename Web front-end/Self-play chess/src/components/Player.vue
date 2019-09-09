@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <div>
-      <div class="down">
+      <div class="down" v-if="show">
         <ul>
           <draggable element="span" v-model="list2" v-bind="dragOptions" :move="onMove">
             <transition-group name="no" class="list-group" tag="ul">
@@ -22,7 +22,7 @@
       <div class="box">
         <div class="left">
           <div class="title">
-            <img src="../assets/touxiang2.jpg" alt/>
+            <img src="../assets/touxiang2.jpg" alt />
           </div>
           <p>{{sec}}</p>
           <div class="blood">
@@ -76,7 +76,7 @@ import draggable from "vuedraggable";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
-  props: ["animals","val","sec"],
+  props: ["animals", "val", "sec", "games", "id"],
   components: {
     draggable,
     Prepare
@@ -84,26 +84,46 @@ export default {
   data() {
     return {
       list2: [],
-      list:[],
-      
+      list: [],
       editable: true,
       isDragging: false,
-      delayedDragging: false
+      delayedDragging: false,
+      show:true
     };
   },
   mounted() {
     this.fetchData();
+    this.getTimer();
   },
   methods: {
     ...mapActions({
       fetchData: "fetchGameData"
-    }), 
+    }),
+    getTimer() {
+    var  time = setInterval(() => {
+       
+        if (this.sec==1){
+          this.show=false
+          this.axios
+            .post("http://localhost:8888/game/battleDataApi", {
+              gameId: this.games,
+              playerId: this.id,
+              cards: this.list2
+            })
+            .then(response => {
+              console.log(response.data)
+            });
+        }else if(this.sec==30){
+             this.show=true
+        }
+      }, 1000);
+    },
     getImage(imgName) {
       var img = imgName;
 
       return require("../assets/images/" + img + ".jpg");
     },
-    onMove({ relatedContext, draggedContext }) {
+    onMove({ relatedContext,draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
       return (
@@ -113,7 +133,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-     game: "getGame"
+      game: "getGame"
     }),
     dragOptions() {
       return {
@@ -128,16 +148,21 @@ export default {
     },
     list2String() {
       return JSON.stringify(this.list2, null, 2);
-    },
+    }
     // list: function() {
-       
+
     //   return this.animals;
     // }
   },
 
   watch: {
-     animals: function(newVal, oldVal) {
-      this.list = newVal;
+    animals: function(newVal, oldVal) {
+      if(this.list.length<9){
+        this.list.push(newVal)
+      }else{
+        console.log("牌库已满")
+      }
+      
     },
     isDragging(newValue) {
       if (newValue) {

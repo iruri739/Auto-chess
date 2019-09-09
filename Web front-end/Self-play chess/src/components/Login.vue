@@ -309,29 +309,30 @@ export default {
             var password = this.ruleForm.password;
              this.$http.get('http://localhost:8888/user/login?userName='+username+'&userPwd='+password).then(resp => {  
                 this.id=resp.data
-              alert(resp.data)
-              })
-                if(this.id!=0){
-                 this.$http.get('http://localhost:8888/user/check?userId='+this.id).then(resp => {
-
-             if(resp.data=true){
-                  this.$router.push({ 
-                   name: "Home" ,
-                   query:{
-                     id:this.id
-                   }
-                   });
-             }else{
-                 this.$router.push({ 
+     this.$router.push({ 
                    name: "Meenu" ,
                    query:{
                      id:this.id
                    }
                    });
-             }
-    })        
+              alert(resp.data)
+              })
+    //             if(this.id!=0){
+    //              this.$http.get('http://localhost:8888/user/check?userId='+this.id).then(resp => {
+    //                alert(resp.data)
+    //          if(resp.data=true){
+    //               this.$router.push({ 
+    //                name: "Home" ,
+    //                query:{
+    //                  id:this.id
+    //                }
+    //                });
+    //          }else{
+                 
+    //          }
+    // })        
                                      
-                                     }
+    //                                  }
             //     if(resp.data!=0){
             //      this.$router.push({ 
             //        name: "Meenu" ,

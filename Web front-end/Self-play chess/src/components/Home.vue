@@ -1,10 +1,29 @@
 <template>
   <div class="container">
     <Draglo></Draglo>
-    <Menu  @getSec="gettime" @aaa="aaa" :glod="player.playerOneData.gold" :number="player.playerOneData.winCount"></Menu>
-    <Prepare :id="playerId"  :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
-    <Battle  :state1="Bstate"></Battle>
-    <Player :sec="sec" :animals="Animals" :val="player.playerOneData.hp"></Player>
+    <Menu
+      @getSec="gettime"
+      @aaa="aaa"
+      :glod="player.playerOneData.gold"
+      :number="player.playerOneData.winCount"
+    ></Menu>
+    <Prepare
+      :sec="sec"
+      :id="playerId"
+      :state2="Pstate"
+      :game="player.gameId"
+      :glod="player.playerOneData.gold"
+      @buy="buya"
+      @shopping="getGlod"
+    ></Prepare>
+    <Battle :state1="Bstate" :sec="sec" :eid="playerId" :gameid="player.gameId"></Battle>
+    <Player
+      :sec="sec"
+      :animals="Animals"
+      :id="playerId"
+      :games="player.gameId"
+      :val="player.playerOneData.hp"
+    ></Player>
   </div>
 </template>
 
@@ -29,35 +48,37 @@ export default {
   },
   data: function() {
     return {
-      Animals: [],
+      Animals: {},
       img,
       Pstate: true,
       Bstate: false,
       playerId: 0,
       player: {},
-      sec:0
-
+      sec: 0
     };
   },
   mounted() {
     this.getPlayer();
   },
   created() {
-    this.getRouterData()
+    this.getRouterData();
   },
   methods: {
-    gettime(value){
-      this.sec=value;
+    gettime(value) {
+      this.sec = value;
     },
     getRouterData() {
-      this.playerId = this.$route.query.id
-      console.log('id', this.playerId)
-     },
+      this.playerId = this.$route.query.id;
+      console.log("id", this.playerId);
+    },
     getPlayer() {
       this.$http
-        .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
+        .get(
+          "http://localhost:8888/game/defaultDataModel?playerId=" +
+            this.playerId
+        )
         .then(resp => {
-          this.player =resp.data;
+          this.player = resp.data;
           console.log(this.player);
         });
     },
@@ -69,8 +90,7 @@ export default {
     },
     buya(value) {
       value.fixed = false;
-      this.Animals.push(value);
-      
+      this.Animals=value;
     }
   }
 };

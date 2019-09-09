@@ -19,7 +19,6 @@
         </div>
         </div>
     <Gonggao class="yuan"> </Gonggao>
-    
 </el-container>
 </template>
 <script>

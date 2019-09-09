@@ -126,9 +126,13 @@ export default {
       this.$http
         .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
         .then(resp => {
-
-          this.name = resp.data.playerOneData.name;
-          this.myName = resp.data.playerTwoData.name;
+           if(resp.data.playerOneData.id==this.playerId){
+             this.myName = resp.data.playerOneData.name;
+             this.name = resp.data.playerTwoData.name;
+           }else{
+              this.myName = resp.data.playerTwoData.name;
+             this.name = resp.data.playerOneData.name;
+           }
           this.player=resp.data
           const _this = this;
           // timer=setTimeout(function() {

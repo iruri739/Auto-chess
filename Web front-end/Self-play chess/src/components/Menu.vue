@@ -85,16 +85,16 @@ export default {
     },
 
   descTimer() {
-      this.sec -= 1;
-      this.$emit("getSec",this.sec)
-      if (this.sec == 0) {
+    this.$emit("getSec",this.sec)
+       this.sec -= 1;
+      if (this.sec == -1) {
         if (this.flg) {
-          
           this.$emit("aaa", this.Bstate, this.Pstate),
             (this.aa = "color:red"),
             (this.li1 = "战斗中"),
             (this.li2 = "战斗回合"),
-            (this.sec = 60);
+            (this.sec = 5);
+          this.$emit("getSec",this.sec)
         } else {
           (this.Bstate = true), (this.Pstate = false);
           this.$emit("aaa", this.Pstate, this.Bstate),
@@ -102,10 +102,11 @@ export default {
             (this.li1 = "准备中"),
             (this.li2 = "准备回合"),
             (this.sec = 30);
+           this.$emit("getSec",this.sec)
         }
         this.flg = !this.flg;
       }
-
+     
       // descTimer() {
       // this.sec -= 1;
       // if (this.sec == 0) {
