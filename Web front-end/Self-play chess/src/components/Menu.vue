@@ -5,39 +5,33 @@
       <div class="box">
         <ul class="top">
           <li></li>
-          <li>round{{number}}</li>
+          <li>回合{{number}}</li>
           <li>
             <div class="timer">
               <div ref="startTimer"></div>
             </div>
           </li>
-          <li>pieces</li>
-          <li>Gold</li>
+          <li>对战</li>
+          <li>金币</li>
         </ul>
         <ul class="center">
           <li>
             <img :src="img" />
           </li>
-          <li :style="aa">{{li1}}</li>
-          <li :style="aa">{{li2}}</li>
+          <li :style="statusBar">{{ready}}</li>
+          <li :style="statusBar">{{preparatoryRound}}</li>
           <li>1vs1</li>
           <li>{{glod}}</li>
         </ul>
 
         <div class="bottom">
           <div>
-            <div :style="aa" ref="descTimer"></div>
+            <div :style="statusBar" ref="descTimer"></div>
           </div>
         </div>
       </div>
     </div>
-    <!-- <el-dialog title="游戏结束" :visible.sync="gameVisible" width="30%" :before-close="handleClose">
-      <span>{{result}}</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="gameVisible = false">取 消</el-button>
-        <el-button type="primary" @click="gameVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>-->
+
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -47,10 +41,12 @@ export default {
   props: ["glod", "number", "id", "game"],
   data: function() {
     return {
-      li1: "准备中",
-      li2: "准备回合",
+      ready: "准备中",
+      preparatoryRound: "准备回合",
       img,
-      timer: "",
+      readyTime: "",
+      totalDuration: "",
+      //timer: "",
       content: "",
       hour: 0,
       minutes: 0,
@@ -60,16 +56,16 @@ export default {
       flg: true,
       Bstate: true,
       Pstate: false,
-      aa: "",
-      play: {}
+      statusBar: "",
+      play: {},
     };
   },
   created() {
-    this.timer = setInterval(this.startTimer, 1000);
-    this.timer = setInterval(this.descTimer, 1000);
+    this.totalDuration= setInterval(this.startTimer, 1000);
+    this.readyTime= setInterval(this.descTimer, 1000);
   },
   destroyed() {
-    clearInterval(this.timer);
+    clearInterval(this.totalDuration);
   },
 
   methods: {
@@ -89,10 +85,10 @@ export default {
       this.sec -= 1;
       if (this.sec == -1) {
         if (this.flg) {
-          this.$emit("aaa", this.Bstate, this.Pstate),
-            (this.aa = "color:red"),
-            (this.li1 = "战斗中"),
-            (this.li2 = "战斗回合"),
+          this.$emit("stateChange", this.Bstate, this.Pstate),
+            (this.statusBar = "color:red"),
+            (this.ready = "战斗中"),
+            (this.preparatoryRound = "战斗回合"),
             (this.sec = 5);
           this.$emit("getSec", this.sec);
           this.flg = !this.flg;
@@ -106,13 +102,12 @@ export default {
                   this.id
               )
               .then(resp => {
-                console.log(resp.data);
                 if (resp.data == true) {
                   (this.Bstate = true), (this.Pstate = false);
-                  this.$emit("aaa", this.Pstate, this.Bstate),
-                    (this.aa = "color:white"),
-                    (this.li1 = "准备中"),
-                    (this.li2 = "准备回合"),
+                  this.$emit("stateChange", this.Pstate, this.Bstate),
+                    (this.statusBar = "color:white"),
+                    (this.ready = "准备中"),
+                    (this.preparatoryRound = "准备回合"),
                     (this.sec = 30);
                   this.$emit("getSec", this.sec);
                   this.flg = !this.flg;
@@ -122,13 +117,12 @@ export default {
                         this.id
                     )
                     .then(resp => {
-                      console.log(resp.data)
                       if (resp.data.playerOneData.id == this.playerId) {
                         this.play = resp.data.playerOneData;
                       } else {
                         this.play = resp.data.playerTwoData;
                       }
-                      $emit("cover", this.play);
+                      this.$emit("cover", this.play);
                     });
 
                   window.clearInterval(time1);
@@ -142,52 +136,7 @@ export default {
         }
       }
 
-      // descTimer() {
-      // this.sec -= 1;
-      // if (this.sec == 0) {
-      //     if (this.flg) {
-      //       debugger
-      //       this.$emit("aaa",this.Bstate,this.Pstate),
-      //       (this.aa = "color:red"),
-      //       (this.li1 = "战斗中"),
-      //       (this.li2 = "战斗回合"),
-      //       (this.sec = 60)
-      //     } else {
-      //       debugger
-      //   //     this.Bstate=true,this.Pstate=false
-      //   //     this.$emit("aaa",this.Pstate,this.Bstate),
-      //   //     (this.aa = "color:white"),
-      //   //       (this.li1 = "准备中"),
-      //   //       (this.li2 = "准备回合"),
-      //   //       (this.sec = 30);
-      //    this.$http
-      //       .get("http://localhost:8888/game/checkGameResult/" + gameid + "/" + userid)
-      //       .then(resp => {
-      //         // alert(resp .data);
-      //         {
-      //           if (resp.data === "true") {
-      //             (this.Bstate = true), (this.Pstate = false);
-      //             this.$emit("aaa", this.Pstate, this.Bstate),
-      //               (this.aa = "color:white"),
-      //               (this.li1 = "准备中"),
-      //               (this.li2 = "准备回合"),
-      //               (this.sec = 30);
-      //           } else if (resp.data === "win") {
-      //             this.gameVisible = true;
-      //             this.result = "恭喜您赢得本局游戏";
-      //             windows.clearInterval(this.descTimer);
-      //           } else if(resp.data === "lose"){
-      //             this.gameVisible = true;
-      //             this.result = "很遗憾您输了";
-      //             windows.clearInterval(this.descTimer);
-      //           }
-      //         }
-      //       });
-
-      //    }
-      //     this.flg = !this.flg;
-
-      // }
+     
       this.$refs.descTimer.innerHTML =
         this.sec < 10 ? "0" + this.sec : this.sec;
     },
