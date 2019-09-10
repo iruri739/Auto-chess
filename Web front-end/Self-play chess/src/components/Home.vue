@@ -4,30 +4,19 @@
     <Menu
       @getSec="gettime"
       @aaa="aaa"
-      :glod="play.gold"
-      :number="player.rounds"
-      :id="playerId"
-      :game="player.gameId"
-      @cover="cover"
+      :glod="player.playerOneData.gold"
+      :number="player.playerOneData.winCount"
     ></Menu>
     <Prepare
-      :sec="sec"
       :id="playerId"
       :state2="Pstate"
-      :animal="play.cardInventory"
-      :gameID="player.gameId"
-      :glod="play.gold"
-      @buy="buya"
+      :game="player.gameId"
+      :glod="player.playerOneData.gold"
+      @buy="addFixesAttr"
       @shopping="getGlod"
     ></Prepare>
-    <Battle :state1="Bstate" :sec="sec" :eid="playerId" :gameid="player.gameId"></Battle>
-    <Player
-      :sec="sec"
-      :animals="Animals"
-      :id="playerId"
-      :games="player.gameId"
-      :val="play.hp"
-    ></Player>
+    <Battle :state1="Bstate"></Battle>
+    <Player :sec="sec" :animals="Animals" :val="player.playerOneData.hp"></Player>
   </div>
 </template>
 
@@ -40,9 +29,6 @@ import Player from "./Player";
 import img from "@/assets/imgs/save.jpg";
 export default {
   name: "Home",
-  props: {
-    msg: String
-  },
   components: {
     Prepare,
     Menu,
@@ -52,61 +38,46 @@ export default {
   },
   data: function() {
     return {
-      Animals: {},
+      Animals: [],
       img,
       Pstate: true,
       Bstate: false,
       playerId: 0,
       player: {},
-      sec: 0,
-      play:{}
+      sec: 0
     };
   },
   mounted() {
-    
+    this.getPlayer();
   },
   created() {
-    console.log("1")
-    this.getPlayer();
-    console.log("2")
     this.getRouterData();
   },
   methods: {
-    cover(value){
-       this.play=value
-    },
     gettime(value) {
       this.sec = value;
     },
     getRouterData() {
       this.playerId = this.$route.query.id;
-      console.log("id", this.playerId);
     },
     getPlayer() {
       this.$http
         .get(
-          "http://localhost:8888/game/defaultDataModel?playerId=" +
-            this.playerId
+          `http://localhost:8888/game/defaultDataModel?playerId=${this.playerId}`
         )
-        .then(resp => { 
+        .then(resp => {
           this.player = resp.data;
-         
-           if (resp.data.playerOneData.id == this.playerId) {
-                this.play = resp.data.playerOneData; 
-              } else {
-                this.play=resp.data.playerTwoData;
-              }
         });
     },
     getGlod(value) {
-      this.play.gold -= value;
+      this.player.playerOneData.gold -= value;
     },
     aaa(value1, value2) {
       (this.Bstate = value1), (this.Pstate = value2);
     },
-    buya(value) {
+    addFixesAttr(value) {
       value.fixed = false;
-      this.Animals=value;
+      this.Animals.push(value);
     }
   }
 };
