@@ -44,7 +44,7 @@
 import img from "@/assets/imgs/ling.jpg";
 export default {
   name: "Menu",
-  props: ["glod", "number", "id", "game"],
+  props: ["glod", "number", "playerId", "gameId"],
   data: function() {
     return {
       li1: "准备中",
@@ -101,9 +101,9 @@ export default {
             this.$http
               .get(
                 "http://localhost:8888/game/gamePrepareCheck?gameId=" +
-                  this.game +
+                  this.gameId +
                   "&playerId=" +
-                  this.id
+                  this.playerId
               )
               .then(resp => {
                 console.log(resp.data);
@@ -119,7 +119,7 @@ export default {
                   this.$http
                     .get(
                       "http://localhost:8888/game/defaultDataModel?playerId=" +
-                        this.id
+                        this.playerId
                     )
                     .then(resp => {
                       console.log(resp.data)

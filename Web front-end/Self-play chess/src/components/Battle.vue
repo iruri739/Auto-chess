@@ -2,7 +2,7 @@
   <div v-if="state1">
     <div class="box">
       <div class="top">
-        <ul id="qq_face faceout">
+        <ul>
           <li
             v-for="(animalA,index) in armyA"
             :key="index"
@@ -14,7 +14,7 @@
       </div>
       <div class="center"></div>
       <div class="down">
-        <ul class="pp_face faceout">
+        <ul>
           <li
             v-for="(animalB,index) in armyB"
             :key="index"
@@ -59,19 +59,22 @@ export default {
         if (this.sec == 5){
           this.$http
             .get(
-              "http://localhost:8888/game/defaultDataModel?playerId=" + this.eid
+              `serveApi/game/defaultDataModel?playerId=${this.eid}`
             )
             .then(resp => {
               console.log(resp.data)
-              if (resp.data.playerOneData.id == this.eid) {
+              
+              if (resp&&resp.data&&resp.data.playerOneData&&(resp.data.playerOneData.id == this.eid)) {
                 this.armyA = resp.data.playerTwoData.battleCards;
                 this.armyB = resp.data.playerOneData.battleCards;
               } else {
                 this.armyA = resp.data.playerOneData.battleCards;
                 this.armyB = resp.data.playerTwoData.battleCards;
               }
+
             });
             this.start()
+
         }
       }, 1000);
     },
@@ -93,10 +96,11 @@ export default {
     // },
 
     start() {
-      //时间轴
+      //时间轴\
+      const animeTime=200;
       var timeline = Anime.timeline({
         easing: "easeOutExpo",
-        duration: 200
+        duration: animeTime
       });
       this.fight(timeline);
     },

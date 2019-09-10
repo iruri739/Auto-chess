@@ -105,7 +105,7 @@ export default {
         if (this.sec==1){
           this.show=false
           this.axios
-            .post("http://localhost:8888/game/battleDataApi", {
+            .post("/serveApi/game/battleDataApi", {
               gameId: this.games,
               playerId: this.id,
               cards: this.list2
@@ -149,10 +149,6 @@ export default {
     list2String() {
       return JSON.stringify(this.list2, null, 2);
     }
-    // list: function() {
-
-    //   return this.animals;
-    // }
   },
 
   watch: {

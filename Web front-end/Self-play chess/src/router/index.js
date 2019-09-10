@@ -23,7 +23,7 @@ export default new Router({
           component: Prepare
         },
         {
-          path: 'Menu',
+          path: 'Menu', 
           component: Menu
         },
         {
@@ -55,12 +55,5 @@ export default new Router({
       component: Login,
       
      }
-    // {
-    //   path: '/',
-    //   name: 'Login',
-    //   component: Login,
-      
-    // },
-    
   ]
 })
