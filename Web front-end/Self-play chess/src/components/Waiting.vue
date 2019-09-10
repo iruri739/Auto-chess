@@ -165,7 +165,7 @@ export default {
         center: true
       })
         .then(() => {
-          this.$router.push({ path: "/Meenu" });
+          this.$router.push({ path: "/Menu" });
           window.clearInterval(time);
           this.$message({
             type: "success",

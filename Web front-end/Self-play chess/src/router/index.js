@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home.vue'
 import Prepare from '@/components/Prepare.vue'
-import Menu from '@/components/Menu.vue'
+import Timer from '@/components/Timer.vue'
 import Player from '@/components/Player.vue'
 import Waiting from '@/components/Waiting.vue'
 import Sceeing from '@/components/Sceeing.vue'
-import Meenu from '@/components/Meenu.vue'
+import Menu from '@/components/Menu.vue'
 import Login from '@/components/Login.vue'
 
 Vue.use(Router)
@@ -23,8 +23,8 @@ export default new Router({
           component: Prepare
         },
         {
-          path: 'Menu', 
-          component: Menu
+          path: 'Timer', 
+          component: Timer
         },
         {
           path: 'Player',
@@ -44,9 +44,9 @@ export default new Router({
       component: Sceeing
     },
     {
-      path: '/Meenu',
-      name: 'Meenu',
-      component: Meenu,
+      path: '/Menu',
+      name: 'Menu',
+      component: Menu,
       
      },
      {

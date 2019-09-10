@@ -17,7 +17,7 @@
                 </el-scrollbar>
             </div>
         </div>
-        <MagicSquare class="MagicSquare"></MagicSquare>
+        <!-- <MagicSquare class="MagicSquare"></MagicSquare> -->
         </div>
     <Announcement class="yuan"> </Announcement>
 </el-container>
@@ -25,12 +25,12 @@
 <script>
 //import uselistbg from "@/assets/images/playerlist.jpg"
 import Announcement from './Announcement'
-import MagicSquare from  "./MagicSquare"
+// import MagicSquare from  "./MagicSquare"
 export default {
   name: "UserView",
   components: {
     Announcement,
-    MagicSquare
+    // MagicSquare
     },
   data: function() {
     return {
@@ -45,7 +45,7 @@ export default {
 
   methods: {
     getOnlineUserList() {
-      this.axios.get("/serveApi/user/onlineUserList").then(resp => {   
+      this.axios.get("/serveApi/user/getOnlineUserList").then(resp => {   
           this.UserList = resp.data.userlist;
       });
     }

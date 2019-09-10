@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <Draglo></Draglo>
-    <Menu
+    <Timer
       @getSec="gettime"
       @aaa="aaa"
       :glod="play.gold"
       :number="player.rounds"
-      :id="playerId"
-      :game="player.gameId"
+      :playerId="playerId"
+      :gameId="player.gameId"
       @cover="cover"
-    ></Menu>
+    ></Timer>
     <Prepare
       :sec="sec"
       :id="playerId"
@@ -34,7 +34,7 @@
 <script>
 import Draglo from "./Draglo";
 import Prepare from "./Prepare";
-import Menu from "./Menu";
+import Timer from "./Timer";
 import Battle from "./Battle";
 import Player from "./Player";
 import img from "@/assets/imgs/save.jpg";
@@ -45,7 +45,7 @@ export default {
   },
   components: {
     Prepare,
-    Menu,
+    Timer,
     Battle,
     Player,
     Draglo
@@ -80,7 +80,7 @@ export default {
     },
     getRouterData() {
       this.playerId = this.$route.query.id;
-      console.log("id", this.playerId);
+      
     },
     getPlayer() {
       this.$http

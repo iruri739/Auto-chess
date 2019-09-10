@@ -1,5 +1,5 @@
 <template>
-  <div id="login" class="login">
+  <div class="login">
     <el-container>
       <div class="logo">
         <img src="@/assets/img/logo.png" />
@@ -7,17 +7,6 @@
       <video id="video" autoplay loop muted="true">
         <source src="@/assets/img/background.mp4" type="video/mp4" />
       </video>
-      <!-- <el-container>
-        <el-main>
-           <HelloWorld msg="Welcome to Your Vue.js App"/> 
-          <ul>
-            <li
-              v-for="(item,index) in users"
-              :key="index"
-            >{{item.id}}-----{{item.name}}------------{{item.sex}}</li>
-          </ul>
-        </el-main>
-      </el-container>-->
 
       <el-aside width="355px">
         <el-container>
@@ -101,13 +90,9 @@
               </el-dialog>
             </el-form-item>
 
-            <!-- <el-form-item label  prop="checkbox">
-              <el-checkbox v-model="ruleForm.checked">是否同意</el-checkbox>
-            </el-form-item>-->
-
             <el-form-item label>
               <el-button @click="dialogFormVisible = true">注册</el-button>
-              <el-button type="primary" @click="submitForm1('ruleForm')">登录</el-button>
+              <el-button type="primary" @click="submitRule('ruleForm')">登录</el-button>
             </el-form-item>
 
             <el-form-item label></el-form-item>
@@ -116,12 +101,17 @@
       </el-aside>
     </el-container>
 
-    <el-dialog title="注册" :visible.sync="dialogFormVisible">
+    <el-dialog
+      custom-class="dialogStyle"
+      title="注册"
+      :visible.sync="dialogFormVisible"
+      :show-close="false"
+    >
       <el-form :model="regform" ref="regform" :rules="rules">
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="regform.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
           <el-input v-model="regform.password" show-password autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="重输密码" :label-width="formLabelWidth">
@@ -194,7 +184,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="clear()">取 消</el-button>
-        <el-button type="primary" @click="submitForm2('regform')">确 定</el-button>
+        <el-button type="primary" @click="submitReg('regform')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -216,7 +206,6 @@ export default {
       id: 0,
       centerDialogVisible: false,
       centerDialogVisibleq: false,
-      //  global: this.GLOBAL.BASE_URL,
       users: [],
       formLabelWidth: "120px",
       ruleForm: {
@@ -244,9 +233,9 @@ export default {
             trigger: "blur"
           },
           { pattern: /^[A-Za-z0-9]+$/, message: "只能输入数字和英文" }
-          //{ pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '只能输入中文和英文'}
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" },
+                   { min: 4,max: 15,message: "长度在 4 到 15 个字符",trigger: "blur"}],
         type: [
           {
             type: "array",
@@ -267,32 +256,40 @@ export default {
     };
   },
   methods: {
-    submitForm2(regform) {
+    submitReg(regform) {
       this.$refs[regform].validate(valid => {
         if (valid) {
           if (
             this.regform.password &&
             this.regform.password === this.regform.password2
           ) {
-            this.$http
-              .post("http://localhost:8888/user/register/", {
+            this.axios
+              .post("/serveApi/user/register/", {
                 userName: this.regform.name,
                 userPwd: this.regform.password
               })
               .then(resp => {
-                alert(resp.data);
                 if (resp.data != 0) {
                   this.$router.push({
-                    name: "Meenu",
+                    name: "Menu",
                     query: {
                       id: resp.data
                     }
+                  });
+                  this.$message({
+                    type: "success",
+                    message: `注册成功！`
+                  });
+                } else {
+                  this.$message({
+                    type: "warning",
+                    message: `用户名已存在！`
                   });
                 }
               });
           } else {
             this.$message({
-              type: "info",
+              type: "warning",
               message: `两次密码不一样或没输入 ！`
             });
           }
@@ -301,32 +298,41 @@ export default {
         }
       });
     },
-    submitForm1(formName) {
+    submitRule(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var username = this.ruleForm.name;
           var password = this.ruleForm.password;
-          // debugger
-          // this.axios
-          // .get("serveApi/user/login?userName="+username+'&userPwd='+password).then(resp => {
-          this.$http
+
+         let abc= this.axios
             .get(
-              this.GLOBAL.BASE_URL +
-                "user/login?userName=" +
-                username +
-                "&userPwd=" +
-                password
+              `/serveApi/user/login?userName=${username}&userPwd=${password}`
             )
             .then(resp => {
               this.id = resp.data;
-              this.$router.push({
-                name: "Meenu",
-                query: {
-                  id: this.id
-                }
-              });
-              alert(resp.data);
+              debugger
+              if (resp.data != 0) {
+                this.$router.push({
+                  name: "Menu",
+                  query: {
+                    id: this.id
+                  }
+                });
+                this.$message({
+                  type: "success",
+                  message: `登录成功 ！`
+                });
+              } else {
+                this.$message.error(`用户名或者密码不正确 ！`);
+              }
+            }).catch(err=>{
+              console.log(err);
             });
+
+            console.log(abc);
+        }
+      });
+    },
           //             if(this.id!=0){
           //              this.$http.get('http://localhost:8888/user/check?userId='+this.id).then(resp => {
           //                alert(resp.data)
@@ -343,15 +349,13 @@ export default {
           //                                  }
           //     if(resp.data!=0){
           //      this.$router.push({
-          //        name: "Meenu" ,
+          //        name: "Menu" ,
           //        query:{
           //          id:resp.data
           //        }
           //        });
           //  }
-        }
-      });
-    },
+        
     clear() {
       this.dialogFormVisible = false;
       this.regform.name = "";
@@ -365,21 +369,20 @@ export default {
 .login .sixteen {
   height: 40px;
   width: 400px;
-  position: fixed;
-  bottom: 30px;
-  margin-left: 950px;
+  position: absolute;
+  top: 90%;
+  left: 70%;
 }
-
 .login .logo {
   position: absolute;
   right: 30px;
   z-index: 5;
 }
-/* body{
- background: url('./assets/img/background.jpg');
- background-size: cover;
- position: relative;
-} */
+.login .el-dialog.dialogStyle {
+  background-image: url("../assets/img/register.jpg");
+  background-size: cover;
+}
+
 .login #video {
   position: fixed;
   right: 0;
@@ -391,7 +394,6 @@ export default {
 }
 .login .el-aside {
   background-color: lightgray;
-  /* float: right; */
   margin-top: 200px;
   position: absolute;
   right: 20px;
