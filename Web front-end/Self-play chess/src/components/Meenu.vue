@@ -1,7 +1,5 @@
 <template>
   <div id="Meenu">
-
-  <!-- <el-carousel indicator-position="outside"> -->
 <el-container>
 <el-carousel :interval="4000" type="card" height="350px">
     <el-carousel-item v-for="item in img" :key="item.index">
@@ -16,11 +14,11 @@
       <el-container>
         <el-button id="campus-home-btn-group" @click="startGames"  plain>
           <div class="btn-group-inner">
-                            <a href="#">
-                                <span>✔ 开始游戏</span>
+                            <div class="start">
+                                <i class="el-icon-check">开始游戏</i>
                                 <em class="em_1"></em>
                                 <em class="em_2"></em>
-                            </a>
+                            </div>
                         </div>     
         </el-button>
       </el-container>
@@ -29,11 +27,11 @@
       <el-container>
         <el-button id="campus-home-btn-group1" @click="quitGame" plain>
            <div class="btn-group-inner">
-                            <a href="#">
-                                <span>✖ 退出游戏</span>
+                            <div class="over">
+                                <i class="el-icon-close">退出游戏</i>
                                 <em class="em_1"></em>
                                 <em class="em_2"></em>
-                            </a>
+                            </div>
                         </div>
         </el-button>
       </el-container>
@@ -55,9 +53,7 @@ export default {
   components: {
     UserView
   },
-  // components: {
-  //   Carousel
-  // },
+
    data: function() {
     return {
       img: [img1, img2, img3,  img4, img5],
@@ -70,7 +66,7 @@ export default {
   methods: {
      getRouterData() {
       this.id = this.$route.query.id
-      console.log('id', this.id)
+      
     },
     startGames: function() {
          this.$router.push({ 
@@ -79,7 +75,7 @@ export default {
                      id:this.id
                    }
                    });
-        // this.$router.push({ path: "/Waiting"});
+     
     },
     quitGame: function() {
         this.$confirm('即将退出游戏！是否继续?', '提示', {
@@ -115,77 +111,75 @@ export default {
   font-size:20px;
   width:155px; 
 }
-#campus-home-btn-group a {
+#campus-home-btn-group .start {
         color: wheat;
         display: inline-block;
         width: 100%;
         position: relative;
     }
-#campus-home-btn-group1 a {
+#campus-home-btn-group1 .over {
         color: wheat;
         display: inline-block;
         width: 100%;
         position: relative;
     }
-    #campus-home-btn-group a em {
+    #campus-home-btn-group .start em {
         position: absolute;
         top: -12.5px;
         left: -20px;
         display: block;
         width: 7.5em;
         height: 2em;
-        /* overflow: hidden; */
         border: 2px solid rgb(238, 241, 243);
        
     }
-    #campus-home-btn-group1 a em {
+    #campus-home-btn-group1 .over em {
         position: absolute;
         top: -12px;
         left: -20px;
         display: block;
         width: 7.5em;
         height: 2em;
-        /* overflow: hidden; */
         border: 2px solid rgb(238, 241, 243);
        
     }
-    #campus-home-btn-group a:hover em {
+    #campus-home-btn-group .start:hover em {
         opacity: .2;
     }
 
-    #campus-home-btn-group a:hover em.em_1 {
+    #campus-home-btn-group .start:hover em.em_1 {
         -webkit-animation: 'cbtnem1'.5s linear;
     }
 
-    #campus-home-btn-group a:hover em.em_2 {
+    #campus-home-btn-group .start:hover em.em_2 {
         -webkit-animation: 'cbtnem2'.75s linear;
     }
 
-    #campus-home-btn-group a:hover em.em_3 {
+    #campus-home-btn-group .start:hover em.em_3 {
         -webkit-animation: 'cbtnem3'1s linear;
     }
 
-    #campus-home-btn-group a:hover em.em_4 {
+    #campus-home-btn-group .start:hover em.em_4 {
         -webkit-animation: 'cbtnem4'1.25s linear;
     }
 
-    #campus-home-btn-group1 a:hover em {
+    #campus-home-btn-group1 .over:hover em {
         opacity: .2;
     }
 
-    #campus-home-btn-group1 a:hover em.em_1 {
+    #campus-home-btn-group1 .over:hover em.em_1 {
         -webkit-animation: 'cbtnem1'.5s linear;
     }
 
-    #campus-home-btn-group1 a:hover em.em_2 {
+    #campus-home-btn-group1 .over:hover em.em_2 {
         -webkit-animation: 'cbtnem2'.75s linear;
     }
 
-    #campus-home-btn-group1 a:hover em.em_3 {
+    #campus-home-btn-group1 .over:hover em.em_3 {
         -webkit-animation: 'cbtnem3'1s linear;
     }
 
-    #campus-home-btn-group1 a:hover em.em_4 {
+    #campus-home-btn-group1 .over:hover em.em_4 {
         -webkit-animation: 'cbtnem4'1.25s linear;
     }
 
@@ -257,17 +251,7 @@ export default {
             -webkit-transform-origin: 60% 40%
         }
     }
-#ExitButton{
-  display:block;
-  margin:0 auto;
-  top:-16px;
-  position:relative;
-  left:895px;
-  background:#735b7c;
-  font-size:20px;
-  width:155px;
 
-}
 body{
   width: 100%;
   background: url('../assets/imgs/background4.jpg');
@@ -304,32 +288,7 @@ body{
    height: 350px; 
 }
 
-.el-row{
-  margin-bottom: 20px;
-}
-.el-row:last-child{
-  margin-bottom: 0;
-}
-.el-col{
-  border-radius: 4px;
-}
-.bg-purple-dark{
-  background: #99a9bf;
-}
-.bg-purple{
-  background: #d3dce6;
-}
-.bg-purple-light{
-  background: #e5e9f2;
-}
-.grid-content{
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg{
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
+
 
 
 </style>
