@@ -31,7 +31,7 @@
 import Anime from "animejs";
 export default {
   name: "Battle",
-  props: ["state1", "sec", "eid", "gameid"],
+  props: ["state1", "sec", "playerId", "gameid"],
   data() {
     return {
       armyA: [],
@@ -57,11 +57,11 @@ export default {
         if (this.sec == 5){
           this.$http
             .get(
-              "http://localhost:8888/game/defaultDataModel?playerId=" + this.eid
+              "http://localhost:8888/game/defaultDataModel?playerId=" + this.playerId
             )
             .then(resp => {
               console.log(resp.data)
-              if (resp.data.playerOneData.id == this.eid) {
+              if (resp.data.playerOneData.id == this.playerId) {
                 this.armyA = resp.data.playerTwoData.battleCards;
                 this.armyB = resp.data.playerOneData.battleCards;
               } else {

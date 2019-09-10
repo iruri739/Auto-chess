@@ -20,7 +20,7 @@
       @buy="buy"
       @shopping="getGlod"
     ></Prepare>
-    <Battle :state1="Bstate" :sec="sec" :eid="playerId" :gameid="player.gameId"></Battle>
+    <Battle :state1="Bstate" :sec="sec" :playerId="playerId" :gameid="player.gameId"></Battle>
     <Player
       :sec="sec"
       :animals="Animals"

@@ -111,6 +111,7 @@ export default {
               cards: this.list2
             })
             .then(response => {
+              debugger
               console.log(response.data)
             });
         }else if(this.sec==30){
