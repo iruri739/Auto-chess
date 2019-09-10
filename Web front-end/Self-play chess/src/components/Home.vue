@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <Draglo></Draglo>
+    <GameSetting></GameSetting>
     <Timer
       @getSec="gettime"
-      @aaa="aaa"
+      @setState="setState"
       :glod="play.gold"
       :number="player.rounds"
       :playerId="playerId"
@@ -17,7 +17,7 @@
       :animal="play.cardInventory"
       :gameID="player.gameId"
       :glod="play.gold"
-      @buy="buya"
+      @buy="buy"
       @shopping="getGlod"
     ></Prepare>
     <Battle :state1="Bstate" :sec="sec" :eid="playerId" :gameid="player.gameId"></Battle>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Draglo from "./Draglo";
+import GameSetting from "./GameSetting";
 import Prepare from "./Prepare";
 import Timer from "./Timer";
 import Battle from "./Battle";
@@ -48,7 +48,7 @@ export default {
     Timer,
     Battle,
     Player,
-    Draglo
+    GameSetting
   },
   data: function() {
     return {
@@ -101,10 +101,10 @@ export default {
     getGlod(value) {
       this.play.gold -= value;
     },
-    aaa(value1, value2) {
+    setState(value1, value2) {
       (this.Bstate = value1), (this.Pstate = value2);
     },
-    buya(value) {
+    buy(value) {
       value.fixed = false;
       this.Animals=value;
     }

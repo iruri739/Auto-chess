@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  name: "Setting",
+  name: "GameSetting",
   data() {
     return {
       checked1: true,
@@ -107,7 +107,7 @@ export default {
   }
 };
 </script>
-<style >
+<style scoped>
 .Setting {
   width: 700px;
   height: 300px;
