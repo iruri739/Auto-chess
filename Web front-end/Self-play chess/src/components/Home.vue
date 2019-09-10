@@ -4,15 +4,19 @@
     <Menu
       @getSec="gettime"
       @aaa="aaa"
-      :glod="player.playerOneData.gold"
-      :number="player.playerOneData.winCount"
+      :glod="play.gold"
+      :number="player.rounds"
+      :id="playerId"
+      :game="player.gameId"
+      @cover="cover"
     ></Menu>
     <Prepare
       :sec="sec"
       :id="playerId"
       :state2="Pstate"
-      :game="player.gameId"
-      :glod="player.playerOneData.gold"
+      :animal="play.cardInventory"
+      :gameID="player.gameId"
+      :glod="play.gold"
       @buy="buya"
       @shopping="getGlod"
     ></Prepare>
@@ -22,7 +26,7 @@
       :animals="Animals"
       :id="playerId"
       :games="player.gameId"
-      :val="player.playerOneData.hp"
+      :val="play.hp"
     ></Player>
   </div>
 </template>
@@ -54,16 +58,23 @@ export default {
       Bstate: false,
       playerId: 0,
       player: {},
-      sec: 0
+      sec: 0,
+      play:{}
     };
   },
   mounted() {
-    this.getPlayer();
+    
   },
   created() {
+    console.log("1")
+    this.getPlayer();
+    console.log("2")
     this.getRouterData();
   },
   methods: {
+    cover(value){
+       this.play=value
+    },
     gettime(value) {
       this.sec = value;
     },
@@ -77,13 +88,18 @@ export default {
           "http://localhost:8888/game/defaultDataModel?playerId=" +
             this.playerId
         )
-        .then(resp => {
+        .then(resp => { 
           this.player = resp.data;
-          console.log(this.player);
+         
+           if (resp.data.playerOneData.id == this.playerId) {
+                this.play = resp.data.playerOneData; 
+              } else {
+                this.play=resp.data.playerTwoData;
+              }
         });
     },
     getGlod(value) {
-      this.player.playerOneData.gold -= value;
+      this.play.gold -= value;
     },
     aaa(value1, value2) {
       (this.Bstate = value1), (this.Pstate = value2);

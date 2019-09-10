@@ -119,7 +119,7 @@ export default {
        // this.$router.push({ path: "/Home" });
       }
     },
-    beforeDestroy() {
+    beforeDestroy(){
     clearInterval(this.timer);
 },
     getPlayer() {

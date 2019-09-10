@@ -24,7 +24,7 @@
           <div class="title">
             <img src="../assets/touxiang2.jpg" alt />
           </div>
-          <p>{{sec}}</p>
+         
           <div class="blood">
             <meter
               min="0"

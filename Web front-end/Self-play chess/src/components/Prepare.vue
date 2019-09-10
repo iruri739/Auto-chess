@@ -21,53 +21,49 @@
 </template>
 <script>
 export default {
-  props: ["state2","glod","game",'id',"sec"],
+  props: ["state2", "glod", "gameID", "id", "sec", "animal"],
   name: "Store",
   data: function() {
     return {
-     
       Animals: [],
       bought: [],
-      count:0
+      count: 0
     };
   },
   watch: {
     state2() {
       this.state2;
     },
-  sec:function(newVal,oldval){ 
-      if(this.sec==1){
+    sec: function(newVal, oldval) {
+      if (this.sec == 1) {
         this.axios
-            .post("http://localhost:8888/game/updateHandCards", {
-              gameId: this.game,
-              playerId: this.id,
-              Cards: this.bought
-            })
-            .then(response => {
-              console.log(response.data);  
-            });
-
-
-
+          .post("http://localhost:8888/game/updateHandCards", {
+            gameId: this.gameID,
+            playerId: this.id,
+            Cards: this.bought
+          })
+          .then(response => {
+            console.log(response.data);
+            this.bought = [];
+          });
       }
-
-  }
-    // glod:function(newVal){
-    //   this.gold=newVal;
-    // }
-
+    },
+    animal: function(newVal, oldval) {
+      this.Animals = newVal;
+    }
   },
-  mounted() {
-
-    this.getMockData();
-  },
+  // mounted() {
+  //   console.log("3")
+  //   this.getMockData();
+  //   console.log("4")
+  // },
   computed: {},
   methods: {
     getShop() {
-      if (this.glod>= 2) {
+      if (this.glod >= 2) {
         // this.gold -= 2;
         this.getMockData();
-        this.$emit("shopping",2)
+        this.$emit("shopping", 2);
       } else if (this.glod <= 1) {
         alert("金币不足");
       }
@@ -81,28 +77,25 @@ export default {
       }
     },
     buycards(item) {
-      
-         if(this.count<9){
-
-         
-      if (typeof item.checked == "undefined" || item.checked == false) {
-        if (this.glod >= item.price) {
-          if (!this.bought) {
-            this.bought = [];
+      if (this.count < 9) {
+        if (typeof item.checked == "undefined" || item.checked == false) {
+          if (this.glod >= item.price) {
+            if (!this.bought) {
+              this.bought = [];
+            }
+            this.$emit("buy", item);
+            this.$emit("shopping", item.price);
+            this.bought.push(item);
+            this.glod -= item.price;
+            this.$set(item, "checked", true);
+            this.count++;
+          } else {
+            alert("金币不足");
+            this.bought = this.deletcard(this.bought, item);
           }
-          this.$emit("buy", item);
-          this.$emit("shopping", item.price)
-          this.bought.push(item);
-          this.glod -= item.price;
-          this.$set(item, "checked", true);
-          this.count++
-        } else {
-          alert("金币不足");
-          this.bought = this.deletcard(this.bought, item);
         }
-      } 
-      }else{
-        alert("牌库已满")
+      } else {
+        alert("牌库已满");
       }
       // else {
       //   item.checked = !item.checked;
@@ -112,13 +105,19 @@ export default {
     },
     getImage(imgName) {
       var img = imgName;
-
       return require("../assets/images/" + img + ".jpg");
     },
     getMockData() {
-      this.$http.get("http://localhost:8888/game/getChessData?gameId="+this.game+"&playerId="+this.id).then(resp => {
-        this.Animals = resp.data;
-      });
+      this.$http
+        .get(
+          "http://localhost:8888/game/getChessData?gameId=" +
+            this.gameID +
+            "&playerId=" +
+            this.id
+        )
+        .then(resp => {
+          this.Animals = resp.data;
+        });
     }
   }
 };

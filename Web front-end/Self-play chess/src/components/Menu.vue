@@ -37,14 +37,14 @@
         <el-button @click="gameVisible = false">取 消</el-button>
         <el-button type="primary" @click="gameVisible = false">确 定</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog>-->
   </div>
 </template>
 <script type="text/ecmascript-6">
 import img from "@/assets/imgs/ling.jpg";
 export default {
   name: "Menu",
-  props: ["glod", "number"],
+  props: ["glod", "number", "id", "game"],
   data: function() {
     return {
       li1: "准备中",
@@ -60,7 +60,8 @@ export default {
       flg: true,
       Bstate: true,
       Pstate: false,
-      aa: ""
+      aa: "",
+      play: {}
     };
   },
   created() {
@@ -72,7 +73,7 @@ export default {
   },
 
   methods: {
-  startTimer() {
+    startTimer() {
       this.seconds += 1;
       if (this.seconds >= 60) {
         this.seconds = 0;
@@ -83,10 +84,9 @@ export default {
         ":" +
         (this.seconds < 10 ? "0" + this.seconds : this.seconds);
     },
-
-  descTimer() {
-    this.$emit("getSec",this.sec)
-       this.sec -= 1;
+    descTimer() {
+      this.$emit("getSec", this.sec);
+      this.sec -= 1;
       if (this.sec == -1) {
         if (this.flg) {
           this.$emit("aaa", this.Bstate, this.Pstate),
@@ -94,19 +94,54 @@ export default {
             (this.li1 = "战斗中"),
             (this.li2 = "战斗回合"),
             (this.sec = 5);
-          this.$emit("getSec",this.sec)
+          this.$emit("getSec", this.sec);
+          this.flg = !this.flg;
         } else {
-          (this.Bstate = true), (this.Pstate = false);
-          this.$emit("aaa", this.Pstate, this.Bstate),
-            (this.aa = "color:white"),
-            (this.li1 = "准备中"),
-            (this.li2 = "准备回合"),
-            (this.sec = 30);
-           this.$emit("getSec",this.sec)
+          var time1 = setInterval(() => {
+            this.$http
+              .get(
+                "http://localhost:8888/game/gamePrepareCheck?gameId=" +
+                  this.game +
+                  "&playerId=" +
+                  this.id
+              )
+              .then(resp => {
+                console.log(resp.data);
+                if (resp.data == true) {
+                  (this.Bstate = true), (this.Pstate = false);
+                  this.$emit("aaa", this.Pstate, this.Bstate),
+                    (this.aa = "color:white"),
+                    (this.li1 = "准备中"),
+                    (this.li2 = "准备回合"),
+                    (this.sec = 30);
+                  this.$emit("getSec", this.sec);
+                  this.flg = !this.flg;
+                  this.$http
+                    .get(
+                      "http://localhost:8888/game/defaultDataModel?playerId=" +
+                        this.id
+                    )
+                    .then(resp => {
+                      console.log(resp.data)
+                      if (resp.data.playerOneData.id == this.playerId) {
+                        this.play = resp.data.playerOneData;
+                      } else {
+                        this.play = resp.data.playerTwoData;
+                      }
+                      $emit("cover", this.play);
+                    });
+
+                  window.clearInterval(time1);
+                } else if (resp.data == "win") {
+                  alert("你赢了");
+                } else if (resp.data == "lose") {
+                  alert("你输了");
+                }
+              });
+          }, 1000);
         }
-        this.flg = !this.flg;
       }
-     
+
       // descTimer() {
       // this.sec -= 1;
       // if (this.sec == 0) {
