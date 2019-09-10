@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div v-if="state2">
     <div class="box">
       <div class="top">
@@ -37,13 +37,12 @@ export default {
     sec: function(newVal, oldval) {
       if (this.sec == 1) {
         this.axios
-          .post("http://localhost:8888/game/updateHandCards", {
+          .post("/serveApi/game/updateHandCards", {
             gameId: this.gameID,
             playerId: this.id,
             Cards: this.bought
           })
           .then(response => {
-            console.log(response.data);
             this.bought = [];
           });
       }
@@ -52,20 +51,20 @@ export default {
       this.Animals = newVal;
     }
   },
-  // mounted() {
-  //   console.log("3")
-  //   this.getMockData();
-  //   console.log("4")
-  // },
+
   computed: {},
   methods: {
     getShop() {
       if (this.glod >= 2) {
-        // this.gold -= 2;
         this.getMockData();
         this.$emit("shopping", 2);
-      } else if (this.glod <= 1) {
-        alert("金币不足");
+      } 
+      else if (this.glod <= 1) {
+        this.$message({
+            type: "info",
+            message: "金币不足!"
+          });
+
       }
     },
     deletcard(bought, item) {
@@ -90,18 +89,20 @@ export default {
             this.$set(item, "checked", true);
             this.count++;
           } else {
-            alert("金币不足");
+            this.$message({
+            type: "info",
+            message: "金币不足!"
+          });
             this.bought = this.deletcard(this.bought, item);
           }
         }
-      } else {
-        alert("牌库已满");
-      }
-      // else {
-      //   item.checked = !item.checked;
-      //   this.gold += item.price;
-      //   this.bought = this.deletcard(this.bought, item);
-      // }
+      } 
+      else {
+        this.$message({
+            type: "info",
+            message: "牌库已满!"
+          });
+       }
     },
     getImage(imgName) {
       var img = imgName;
@@ -110,10 +111,7 @@ export default {
     getMockData() {
       this.$http
         .get(
-          "http://localhost:8888/game/getChessData?gameId=" +
-            this.gameID +
-            "&playerId=" +
-            this.id
+          `/serveApi/game/getChessData?gameId=${this.gameID}&playerId=${this.id}` 
         )
         .then(resp => {
           this.Animals = resp.data;

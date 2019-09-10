@@ -10,7 +10,6 @@ import game from './module.js'
 import player1 from './module.js'
 import player2 from './module.js'
 import './plugins/element.js'
-import global_ from "./components/Global"
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)

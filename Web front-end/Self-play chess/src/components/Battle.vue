@@ -2,7 +2,7 @@
   <div v-if="state1">
     <div class="box">
       <div class="top">
-        <ul>
+        <ul id="qq_face faceout">
           <li
             v-for="(animalA,index) in armyA"
             :key="index"
@@ -14,7 +14,7 @@
       </div>
       <div class="center"></div>
       <div class="down">
-        <ul>
+        <ul class="pp_face faceout">
           <li
             v-for="(animalB,index) in armyB"
             :key="index"
@@ -41,12 +41,10 @@ export default {
   mounted() {
     this.getMockData();
   },
-
   methods: {
     getIdA(index) {
       return "animalA" + index;
     },
-
     getIdB(index) {
       return "animalB" + index;
     },
@@ -59,26 +57,22 @@ export default {
         if (this.sec == 5){
           this.$http
             .get(
-              `serveApi/game/defaultDataModel?playerId=${this.eid}`
+              "http://localhost:8888/game/defaultDataModel?playerId=" + this.eid
             )
             .then(resp => {
               console.log(resp.data)
-              
-              if (resp&&resp.data&&resp.data.playerOneData&&(resp.data.playerOneData.id == this.eid)) {
+              if (resp.data.playerOneData.id == this.eid) {
                 this.armyA = resp.data.playerTwoData.battleCards;
                 this.armyB = resp.data.playerOneData.battleCards;
               } else {
                 this.armyA = resp.data.playerOneData.battleCards;
                 this.armyB = resp.data.playerTwoData.battleCards;
               }
-
             });
             this.start()
-
         }
       }, 1000);
     },
-
     // this.funcAsync().then(resp => {
     //   var sd = [];
     //   for (let i = 0; i < 3; i++) {
@@ -94,13 +88,11 @@ export default {
     // funcAsync() {
     //   return this.axios.get("/mock/Animals");
     // },
-
     start() {
-      //时间轴\
-      const animeTime=200;
+      //时间轴
       var timeline = Anime.timeline({
         easing: "easeOutExpo",
-        duration: animeTime
+        duration: 200
       });
       this.fight(timeline);
     },
@@ -132,27 +124,20 @@ export default {
           isOver = true;
           return;
         }
-
         var animalA = this.armyA[index1];
         var animalB = this.armyB[index2];
-
         var animalAHP = animalA.hp;
         var animalBHP = animalB.hp;
-
         var positionA = this.getSelfFightPosition(index1, index2);
         var positionB = this.getSelfFightPosition(index2, index1);
-
         var elements1 = document.getElementById(this.getIdA(index1));
         var elements2 = document.getElementById(this.getIdB(index2));
-
         let armyAAttack = this.armyA[index1].attack;
         let armyBAttack = this.armyB[index2].attack;
-
         while (this.armyA[index1].hp > 0 && this.armyB[index2].hp > 0) {
           this.armyA[index1].hp -= armyBAttack;
           this.armyB[index2].hp -= armyAAttack;
         }
-
         if (this.armyA[index1].hp <= 0) {
           this.armyA[index1].hp = 0;
         }
@@ -161,10 +146,8 @@ export default {
         }
         // var e1 = document.getElementById(this.getIdA(index1));
         // var e2 = document.getElementById(this.getIdB(index2));
-
         var hp1 = JSON.parse(JSON.stringify(this.armyA[index1].hp));
         var hp2 = JSON.parse(JSON.stringify(this.armyB[index2].hp));
-
         timeline
           .add({
             targets: elements1,
@@ -190,7 +173,6 @@ export default {
             innerHTML: [animalBHP, hp2],
             round: 1
           });
-
         // for(var j=0;j<this.armyA.length;j++){
         //   console.log("Army1 第" +j + "个动物血量："+ this.armyA[j].hp + "   vs    Army2 第" +j + "个动物血量："+ this.armyB[j].hp);
         // }
@@ -200,7 +182,6 @@ export default {
         this.fight(timeline);
       }
     },
-
     getSelfFightPosition(selfIndex, enemyIndex) {
       var distance = 70;
       return (enemyIndex - selfIndex) * distance;
