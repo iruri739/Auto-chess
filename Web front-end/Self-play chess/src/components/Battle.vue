@@ -2,25 +2,24 @@
   <div v-if="state1">
     <div class="box">
       <div class="top">
-        <ul id="qq_face faceout">
+        <ul>
           <li
-            v-for="(animalA,index) in armyA"
+            v-for="(enemyChess,index) in enemyArmy"
             :key="index"
-            :style="{backgroundImage:'url('+makeUrl(animalA.img)+')'}"
-            :id="getIdA(index)"
-          >{{animalA.hp}}</li>
+            :style="{backgroundImage:'url('+makeUrl(enemyChess.img)+')'}"
+            :id="getEnemyChessId(index)"
+          >{{enemyChess.hp}}</li>
         </ul>
-        <!-- <button @click="start()">开始战斗</button> -->
       </div>
       <div class="center"></div>
-      <div class="down">
-        <ul class="pp_face faceout">
+      <div class="bottom">
+        <ul>
           <li
-            v-for="(animalB,index) in armyB"
+            v-for="(selfChess,index) in selfArmy"
             :key="index"
-            :style="{backgroundImage:'url('+makeUrl(animalB.img)+')'}"
-            :id="getIdB(index)"
-          >{{animalB.hp}}</li>
+            :style="{backgroundImage:'url('+makeUrl(selfChess.img)+')'}"
+            :id="getSelfChessId(index)"
+          >{{selfChess.hp}}</li>
         </ul>
       </div>
     </div>
@@ -34,8 +33,8 @@ export default {
   props: ["state1", "sec", "eid", "gameid"],
   data() {
     return {
-      armyA: [],
-      armyB: []
+      enemyArmy: [],
+      selfArmy: []
     };
   },
   mounted() {
@@ -43,61 +42,40 @@ export default {
   },
 
   methods: {
-    getIdA(index) {
-      return "animalA" + index;
+    getEnemyChessId(index) {
+      return "enemyChess" + index;
     },
-
-    getIdB(index) {
-      return "animalB" + index;
+    getSelfChessId(index) {
+      return "selfChess" + index;
     },
     makeUrl(url) {
       return require("../assets/images/" + url + ".jpg");
     },
     getMockData() {
       var time = setInterval(() => {
-        console.log(this.sec)
-        if (this.sec == 5){
+        if (this.sec == 5) {
           this.$http
-            .get(
-              `serveApi/game/defaultDataModel?playerId=${this.eid}`
-            )
+            .get(`serveApi/game/defaultDataModel?playerId=${this.eid}`)
             .then(resp => {
-              console.log(resp.data)
-              
-              if (resp&&resp.data&&resp.data.playerOneData&&(resp.data.playerOneData.id == this.eid)) {
-                this.armyA = resp.data.playerTwoData.battleCards;
-                this.armyB = resp.data.playerOneData.battleCards;
+              if (
+                resp &&
+                resp.data &&
+                resp.data.playerOneData &&
+                resp.data.playerOneData.id == this.eid
+              ) {
+                this.enemyArmy = resp.data.playerTwoData.battleCards;
+                this.selfArmy = resp.data.playerOneData.battleCards;
               } else {
-                this.armyA = resp.data.playerOneData.battleCards;
-                this.armyB = resp.data.playerTwoData.battleCards;
+                this.enemyArmy = resp.data.playerOneData.battleCards;
+                this.selfArmy = resp.data.playerTwoData.battleCards;
               }
-
             });
-            this.start()
-
+          this.start();
         }
       }, 1000);
     },
-
-    // this.funcAsync().then(resp => {
-    //   var sd = [];
-    //   for (let i = 0; i < 3; i++) {
-    //     sd.push(JSON.parse(JSON.stringify(resp.data[Math.floor(Math.random()*30)+1])));
-    //   }
-    //   this.armyA = sd;
-    //   var xd = [];
-    //   for (let i = 0; i < 5; i++) {
-    //     xd.push(JSON.parse(JSON.stringify(resp.data[Math.floor(Math.random()*30)+1])));
-    //   }
-    //   this.armyB = xd;
-    // });
-    // funcAsync() {
-    //   return this.axios.get("/mock/Animals");
-    // },
-
     start() {
-      //时间轴\
-      const animeTime=200;
+      const animeTime = 200;
       var timeline = Anime.timeline({
         easing: "easeOutExpo",
         duration: animeTime
@@ -107,104 +85,88 @@ export default {
     fight(t) {
       var timeline = t;
       var isOver = false;
-      // var round = 1;
       if (isOver) {
         return;
       }
-      // for(var j=0;j<this.armyA.length;j++){
-      //   console.log("Army1 第" +j + "个动物血量："+ this.armyA[j].hp + "   vs    Army2 第" +j + "个动物血量："+ this.armyB[j].hp);
-      // }
-      // console.log("--------------------------------------------上面是打之前的血量-----------------------------");
-      for (var pos = 0; pos < 5; pos++) {
-        var posA = pos;
-        var posB = pos;
-        if (pos > this.armyA.length - 1) {
-          posA = this.armyA.length - 1;
+      for (var position = 0; position < 5; position++) {
+        var enemyPosition = position;
+        var selfPosition = position;
+        if (position > this.enemyArmy.length - 1) {
+          enemyPosition = this.enemyArmy.length - 1;
         }
-        if (pos > this.armyB.length - 1) {
-          posB = this.armyB.length - 1;
+        if (position > this.selfArmy.length - 1) {
+          selfPosition = this.selfArmy.length - 1;
         }
-        var index1 = this.findAnimalIndex(this.armyA, posA);
-        var index2 = this.findAnimalIndex(this.armyB, posB);
-        // console.log("---------------------第" +round +"轮--------------------------------");
-        // console.log("Army1 第" +index1 + "个动物 打Army2 第" +index2 + "个动物");
-        if (index1 == -1 || index2 == -1) {
+        var enemyIndex = this.findAnimalIndex(this.enemyArmy, enemyPosition);
+        var selfIndex = this.findAnimalIndex(this.selfArmy, selfPosition);
+        if (enemyIndex == -1 || selfIndex == -1) {
           isOver = true;
-          return;
+          break;
+        }
+        var enemyChess = this.enemyArmy[enemyIndex];
+        var selfChess = this.selfArmy[selfIndex];
+
+        var enemyChessHP = enemyChess.hp;
+        var selfChessHP = selfChess.hp;
+        
+        var enemyOffset = this.getOffset(enemyIndex, selfIndex);
+        var selfOffset = this.getOffset(selfIndex, enemyIndex);
+
+        var elements1 = document.getElementById(this.getEnemyChessId(enemyIndex));
+        var elements2 = document.getElementById(this.getSelfChessId(selfIndex));
+
+        let enemyArmyAttack = this.enemyArmy[enemyIndex].attack;
+        let selfArmyAttack = this.selfArmy[selfIndex].attack;
+
+        while (this.enemyArmy[enemyIndex].hp > 0 && this.selfArmy[selfIndex].hp > 0) {
+          this.enemyArmy[enemyIndex].hp -= selfArmyAttack;
+          this.selfArmy[selfIndex].hp -= enemyArmyAttack;
         }
 
-        var animalA = this.armyA[index1];
-        var animalB = this.armyB[index2];
-
-        var animalAHP = animalA.hp;
-        var animalBHP = animalB.hp;
-
-        var positionA = this.getSelfFightPosition(index1, index2);
-        var positionB = this.getSelfFightPosition(index2, index1);
-
-        var elements1 = document.getElementById(this.getIdA(index1));
-        var elements2 = document.getElementById(this.getIdB(index2));
-
-        let armyAAttack = this.armyA[index1].attack;
-        let armyBAttack = this.armyB[index2].attack;
-
-        while (this.armyA[index1].hp > 0 && this.armyB[index2].hp > 0) {
-          this.armyA[index1].hp -= armyBAttack;
-          this.armyB[index2].hp -= armyAAttack;
+        if (this.enemyArmy[enemyIndex].hp <= 0) {
+          this.enemyArmy[enemyIndex].hp = 0;
         }
-
-        if (this.armyA[index1].hp <= 0) {
-          this.armyA[index1].hp = 0;
+        if (this.selfArmy[selfIndex].hp <= 0) {
+          this.selfArmy[selfIndex].hp = 0;
         }
-        if (this.armyB[index2].hp <= 0) {
-          this.armyB[index2].hp = 0;
-        }
-        // var e1 = document.getElementById(this.getIdA(index1));
-        // var e2 = document.getElementById(this.getIdB(index2));
-
-        var hp1 = JSON.parse(JSON.stringify(this.armyA[index1].hp));
-        var hp2 = JSON.parse(JSON.stringify(this.armyB[index2].hp));
+        var hp1 = JSON.parse(JSON.stringify(this.enemyArmy[enemyIndex].hp));
+        var hp2 = JSON.parse(JSON.stringify(this.selfArmy[selfIndex].hp));
 
         timeline
           .add({
             targets: elements1,
-            translateX: positionA,
+            translateX: enemyOffset,
             translateY: 90
           })
           .add({
             targets: elements2,
-            translateX: positionB,
+            translateX: selfOffset,
             translateY: -90
           })
           .add({
             targets: elements1,
             translateX: 0,
             translateY: 0,
-            innerHTML: [animalAHP, hp1],
+            innerHTML: [enemyChessHP, hp1],
             round: 1
           })
           .add({
             targets: elements2,
             translateX: 0,
             translateY: 0,
-            innerHTML: [animalBHP, hp2],
+            innerHTML: [selfChessHP, hp2],
             round: 1
           });
-
-        // for(var j=0;j<this.armyA.length;j++){
-        //   console.log("Army1 第" +j + "个动物血量："+ this.armyA[j].hp + "   vs    Army2 第" +j + "个动物血量："+ this.armyB[j].hp);
-        // }
-        //  round++;
       }
       if (!isOver) {
         this.fight(timeline);
       }
     },
-
-    getSelfFightPosition(selfIndex, enemyIndex) {
+    getOffset(selfIndex, enemyIndex) {
       var distance = 70;
       return (enemyIndex - selfIndex) * distance;
     },
+
     findAnimalIndex(army, position) {
       var isAllDead = true;
       if (army[position] != null && army[position].hp > 0) {
@@ -272,11 +234,11 @@ ul li {
   margin-left: 100px;
   top: 0;
 }
-.down ul {
+.bottom ul {
   margin-left: 100px;
   top: 0;
 }
-.down ul li {
+.bottom ul li {
   text-align: center;
   color: blue;
   font-size: 30px;
@@ -289,7 +251,7 @@ ul li {
   float: left;
   position: relative;
 }
-.down {
+.bottom {
   width: 900px;
   height: 100px;
   background: #232611;
