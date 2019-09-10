@@ -17,17 +17,20 @@
                 </el-scrollbar>
             </div>
         </div>
+        <MagicSquare class="MagicSquare"></MagicSquare>
         </div>
-    <Gonggao class="yuan"> </Gonggao>
+    <Announcement class="yuan"> </Announcement>
 </el-container>
 </template>
 <script>
 //import uselistbg from "@/assets/images/playerlist.jpg"
-import Gonggao from './Gonggao'
+import Announcement from './Announcement'
+import MagicSquare from  "./MagicSquare"
 export default {
   name: "UserView",
   components: {
-    Gonggao
+    Announcement,
+    MagicSquare
     },
   data: function() {
     return {
@@ -42,7 +45,7 @@ export default {
 
   methods: {
     getOnlineUserList() {
-      this.axios.get("http://localhost:8888/user/onlineUserList").then(resp => {   
+      this.axios.get("/serveApi/user/onlineUserList").then(resp => {   
           this.UserList = resp.data.userlist;
       });
     }
@@ -83,11 +86,18 @@ export default {
         color:white;
         line-height:2em;
     }
-    .yuan{
-     width: 650px;
-    background:#fcf9f8;
-     opacity: 0.8;
+    .MagicSquare{
 
+      margin:auto;
+    }
+    .yuan{
+    width: 360px;
+    background: black;
+    height: 400px;
+    top: 50%;
+    left: 70%;
+    opacity: 0.5;
+    position: absolute;
     }
     h3{
         color:white;
