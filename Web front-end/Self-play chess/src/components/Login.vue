@@ -1,5 +1,5 @@
 <template>
-  <div id="Login">
+  <div id="login" class="login">
     <el-container>
       <div class="logo">
         <img src="@/assets/img/logo.png" />
@@ -308,7 +308,7 @@ export default {
           var password = this.ruleForm.password;
           // debugger
           // this.axios
-          // .get("http:localhost:8888/user/login?userName="+username+'&userPwd='+password).then(resp => {
+          // .get("serveApi/user/login?userName="+username+'&userPwd='+password).then(resp => {
           this.$http
             .get(
               this.GLOBAL.BASE_URL +
@@ -362,7 +362,7 @@ export default {
 };
 </script>
 <style>
-.sixteen {
+.login .sixteen {
   height: 40px;
   width: 400px;
   position: fixed;
@@ -370,7 +370,7 @@ export default {
   margin-left: 950px;
 }
 
-.logo {
+.login .logo {
   position: absolute;
   right: 30px;
   z-index: 5;
@@ -380,7 +380,7 @@ export default {
  background-size: cover;
  position: relative;
 } */
-#video {
+.login #video {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -389,14 +389,14 @@ export default {
   width: 1366px;
   height: 768px;
 }
-.el-aside {
+.login .el-aside {
   background-color: lightgray;
   /* float: right; */
   margin-top: 200px;
   position: absolute;
   right: 20px;
 }
-#Login {
+.login {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
