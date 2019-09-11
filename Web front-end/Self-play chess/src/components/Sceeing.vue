@@ -1,35 +1,29 @@
 <template>
   <div id="Sceeing">
-    <el-container>
-      <div class="block">
-        <span class="demonstration"></span>
-      </div>
-
-      <div class="block">
-        <span class="demonstration"></span>
-      </div>
-      <div class="d1">
+      <div class="whole">
         <div>
           <img src="../assets/timg.jpg" width="100%" height="700px" />
         </div>
 
-        <div class="divcss5">
-          <div class="divcss5-g">
+        <div class="divcss">
+          <div class="divcss-a">
             <img src="../assets/touxiang2.jpg" width="140px" height="140px" />
           </div>
 
-          <div class="divcss5-h">
+          <div class="divcss-b">
             <img src="../assets/touxiang4.jpg" width="140px" height="140px" />
           </div>
-          <div class="divcss5-c">
-            <font size="7">匹配成功</font>
+
+          <div class="divcss-c">
+            <el-button type="primary" :loading="true">正在进入战场</el-button>
           </div>
 
-          <div class="divcss5-e">{{myName}}</div>
-          <div class="divcss5-f">{{name}}</div>
-          <div class="divcss5-d">
-            <el-button type="primary" :loading="true">正在进入游戏</el-button>
+          <div class="divcss-d">
+            <font size="7">匹配成功</font>
           </div>
+        
+          <div class="divcss-e">{{myName}}</div>
+          <div class="divcss-f">{{name}}</div>
 
           <div>
             <div class="textBox">
@@ -40,7 +34,6 @@
           </div>
         </div>
       </div>
-    </el-container>
   </div>
 </template>
 
@@ -60,7 +53,7 @@ export default {
         " 当一局游戏结束后，会开始下一轮，直至玩家生命值为0。"
       ],
       number: 0,
-      set: 3,
+      set: 4,
       playerId: 0,
       name: "",
       myName:"",
@@ -100,37 +93,26 @@ export default {
                      id:this.playerId
                    }
                    });
-      
+
       }
     },
     beforeDestroy(){
     clearInterval(this.timer);
 },
-    getPlayer() {
-     
-     
-      this.$http
-        .get("serveApi/game/initRounds?playerId="+this.playerId)
+  getPlayer() {
+      this.axios
+        .get(`/serveApi/game/initRounds?playerId=${this.playerId}`)
         .then(resp => {
-           if(resp.data.playerOneData.id==this.playerId){
+          if (resp.data.playerOneData.id == this.playerId) {
             this.myName = resp.data.playerOneData.name;
             this.name = resp.data.playerTwoData.name;
-           }else{
+          } else {
             this.myName = resp.data.playerTwoData.name;
             this.name = resp.data.playerOneData.name;
-           }
-          //  debugger
-          // this.player=resp.data
-          //    this.gameId = resp.data.gameId;
-          //    that.setPrepareTime(resp.data.prepareTime);
-          //    that.setRoundData(resp.data.rounds);
-          //    debugger
-        },
-        );
-        
-       
+          }
+          this.player = resp.data;
+        });
     },
-
     //文字轮播
     startMove() {
       let timer = setTimeout(() => {
@@ -140,13 +122,15 @@ export default {
           this.number += 1;
         }
         this.startMove();
+        window.clearInterval(carsel);
       }, 2000); // 滚动不需要停顿则将2000改成动画持续时间
     }
   }
 };
+var carsel;
 </script>
 
-<style>
+<style scoped>
 #Sceeing {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -155,8 +139,7 @@ export default {
   color: #2c3e50;
   margin-top: 5px;
 }
-
-.d1 {
+.whole {
   position: absolute;
   left: 0px;
   top: -30px;
@@ -164,7 +147,7 @@ export default {
   height: 100%;
   z-index: -1;
 }
-.divcss5 {
+.divcss {
   position: relative;
   left: 330px;
   top: -480px;
@@ -172,34 +155,36 @@ export default {
   height: 400px;
   border: 0px;
   background: #bdbdbd;
-}
-/* 定义父级position:relative:绝对定位声明*/
-.divcss5-g {
+}.divcss-a {
   position: absolute;
   margin-left: 50px;
   top: 130px;
 }
-.divcss5-g img {
+.divcss-a img {
   cursor: pointer;
   transition: all 0.6s;
 }
-.divcss5-g img:hover {
+.divcss-a img:hover {
   transform: scale(1.4);
 }
 /* 使用绝对定位position:absolute样式 并且使用left top进行定位位置 */
-.divcss5-h {
+.divcss-b {
   position: absolute;
   margin-left: 560px;
   top: 130px;
 }
-.divcss5-h img {
+.divcss-b img {
   cursor: pointer;
   transition: all 0.6s;
 }
-.divcss5-h img:hover {
+.divcss-b img:hover {
   transform: scale(1.4);
+}.divcss-c {
+  position: absolute;
+  top: 10%;
+  left: 40%;
 }
-.divcss5-c {
+.divcss-d {
   position: absolute;
   width: 250px;
   height: 80px;
@@ -207,12 +192,7 @@ export default {
   top: 160px;
   font-weight: bold;
 }
-.divcss5-d {
-  position: absolute;
-  top: 10%;
-  left: 40%;
-}
-.divcss5-e {
+.divcss-e {
   position: absolute;
   width: 250px;
   height: 80px;
@@ -220,14 +200,39 @@ export default {
   top: 280px;
   font-weight: bold;
 }
-.divcss5-f {
+.divcss-f {
   position: absolute;
   width: 250px;
   height: 80px;
   left: 500px;
   top: 280px;
   font-weight: bold;
+}.textBox {
+  position: absolute;
+  left: -10px;
+  top: 90%;
+  width: 800px;
+  height: 30px;
+  border: 0px;
 }
-
+.text {
+  width: 100%;
+  size: 5px;
+  position: absolute;
+  color: rgb(16, 16, 17);
+  bottom: 0;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 1s linear;
+}
+.slide-enter {
+  transform: translateY(20px) scale(1);
+  opacity: 1;
+}
+.slide-leave-to {
+  transform: translateY(-20px) scale(0.8);
+  opacity: 0;
+}
 /* 使用绝对定位position:absolute样式 并且使用right bottom进行定位位置 */
 </style>
