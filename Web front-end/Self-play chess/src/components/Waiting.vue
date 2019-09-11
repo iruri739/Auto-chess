@@ -1,31 +1,21 @@
 <template>
   <div id="Waiting">
-    <el-container>
-      <div class="block">
-        <span class="demonstration"></span>
-      </div>
 
-      <div class="block">
-        <span class="demonstration"></span>
-      </div>
-
-      <div class="d1">
+      <div class="entire">
+       <!-- 背景图片 -->
         <div>
           <img src="../assets/timg.jpg" width="100%" height="720px" />
         </div>
-        <!-- <video id="video" autoplay loop muted="true">
-          <source src="../assets/background.mp4" type="video/mp4">
-        </video>-->
 
-        <div class="divcss5">
-          <div class="divcss5-a">
+        <div class="divcss">
+          <!-- 玩家头像 -->
+          <div class="divcss-a">
             <img src="../assets/touxiang2.jpg" width="140px" height="140px" />
           </div>
-          <div class="divcss5-b">
+          <div class="divcss-b">
             <img src="../assets/touxiang.jpg" width="140px" height="140px" />
           </div>
-
-          <link rel="stylesheet" href="bootstrap.min.css" />
+         <!-- 加载动画 -->
           <div class="container">
             <div class="row">
               <div class="col-md-12">
@@ -39,7 +29,7 @@
               </div>
             </div>
           </div>
-
+          <!-- 背景星星 -->
           <div class="stars"></div>
 
           <div class="text-effect">
@@ -50,33 +40,30 @@
             <span>.</span>
             <span>.</span>
           </div>
+
           <div class="button">
             <el-button type="button" @click="open">取消匹配</el-button>
           </div>
-          <div class="divcss5-e"></div>
-          <div class="divcss5-f"></div>
-          <div class="divcss5-d">
+          <!-- 用户姓名 -->
+          <div class="divcss-e"></div>
+          <div class="divcss-f"></div>
+
+          <div class="divcss-d">
             <el-button type="primary" :loading="true">寻找势均力敌的玩家</el-button>
           </div>
-          <div>
+          <!-- 轮播小提醒文字 -->
             <div class="textBox">
               <transition name="slide">
                 <p class="text" :key="text.id">{{text.val}}</p>
               </transition>
             </div>
-          </div>
-
-          <div class="pic">
-            <img :src="now" />
-          </div>
+          
         </div>
       </div>
-    </el-container>
   </div>
 </template>
 <script>
-import { clearTimeout, clearInterval } from "timers";
-import { watch } from "fs";
+import { clearInterval } from "timers";
 export default {
   name: "Waiting",
   data() {
@@ -95,9 +82,7 @@ export default {
       playerId: 0
     };
   },
-
   computed: {
-   
     text() {
       return {
         id: this.number,
@@ -115,28 +100,25 @@ export default {
     
   },
   methods: {
-    
     getRouterData() {
       this.playerId = this.$route.query.id;
       console.log("id", this.playerId);
     },
     //轮询发送匹配请求
-    getTimer() {
+ getTimer() {
       time = setInterval(() => {
-        this.$http
-          .get("http://localhost:8888/game/matchGame?playerId=" + this.playerId)
+        this.axios
+          .get(`/serveApi/game/matchGame?playerId=${this.playerId}`)
           .then(resp => {
             this.bool = resp.data;
           });
         if (this.bool == true) {
-          //this.$router.push({ path: "/Sceeing" });
           this.$router.push({
             name: "Sceeing",
             query: {
               id: this.playerId
             }
           });
-
           window.clearInterval(time);
         }
       }, 1000);
@@ -144,7 +126,6 @@ export default {
         window.clearInterval(time);
       }
     },
-
     //文字轮播
     startMove() {
       setTimeout(() => {
@@ -154,9 +135,10 @@ export default {
           this.number += 1;
         }
         this.startMove();
+        window.clearInterval(carse);
       }, 3000); // 滚动不需要停顿则将2000改成动画持续时间
     },
-
+    // 退出匹配判断
     open() {
       this.$confirm("是否退出游戏?", "提示", {
         confirmButtonText: "确定",
@@ -181,11 +163,11 @@ export default {
     }
   }
 };
-
 var time;
+var carse;
 </script>
 
-<style>
+<style scoped>
 #Waiting {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -194,7 +176,7 @@ var time;
   color: #2c3e50;
   margin-top: 5px;
 }
-.video {
+.entire {
   position: absolute;
   left: 0px;
   top: -30px;
@@ -202,16 +184,7 @@ var time;
   height: 100%;
   z-index: -1;
 }
-.d1 {
-  position: absolute;
-  left: 0px;
-  top: -30px;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
-.divcss5 {
+.divcss {
   position: relative;
   left: 330px;
   top: -480px;
@@ -221,38 +194,37 @@ var time;
   background: #bdbdbd;
 }
 /* 定义父级position:relative:绝对定位声明*/
-.divcss5-a {
+.divcss-a {
   position: absolute;
   margin-left: 50px;
   top: 130px;
 }
-.divcss5-a img {
+.divcss-a img {
   cursor: pointer;
   transition: all 0.6s;
 }
-.divcss5-a img:hover {
+.divcss-a img:hover {
   transform: scale(1.4);
 }
 /* 使用绝对定位position:absolute样式 并且使用left top进行定位位置 */
-.divcss5-b {
+.divcss-b {
   position: absolute;
   margin-left: 560px;
   top: 130px;
 }
-.divcss5-b img {
+.divcss-b img {
   cursor: pointer;
   transition: all 0.6s;
 }
-.divcss5-b img:hover {
+.divcss-b img:hover {
   transform: scale(1.4);
 }
-
-.divcss5-d {
+.divcss-d {
   position: absolute;
   top: 10%;
-  left: 32%;
+  left: 40%;
 }
-.divcss5-e {
+.divcss-e {
   position: absolute;
   width: 250px;
   height: 80px;
@@ -260,7 +232,7 @@ var time;
   top: 280px;
   font-weight: bold;
 }
-.divcss5-f {
+.divcss-f {
   position: absolute;
   width: 250px;
   height: 80px;
@@ -338,15 +310,11 @@ var time;
     font-size: 27px;
   }
 }
-
 .button {
-  position: relative;
-  border: 0px;
-  top: 250px;
+  position: absolute;
+  top: 80%;
   width: 800px;
-  left: -32px;
 }
-
 .textBox {
   position: absolute;
   left: -10px;
@@ -430,12 +398,8 @@ var time;
     transform: rotateX(360deg) scale(0.8);
   }
 }
-
     
  
-
-
-
 html, body { 
   height: 100%;
 }
