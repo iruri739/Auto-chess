@@ -310,7 +310,6 @@ export default {
             )
             .then(resp => {
               this.id = resp.data;
-              debugger
               if (resp.data != 0) {
                 this.$router.push({
                   name: "Menu",
@@ -326,15 +325,13 @@ export default {
                 this.$message.error(`用户名或者密码不正确 ！`);
               }
             }).catch(err=>{
-              console.log(err);
             });
 
-            console.log(abc);
         }
       });
     },
           //             if(this.id!=0){
-          //              this.$http.get('http://localhost:8888/user/check?userId='+this.id).then(resp => {
+          //              this.$http.get('serveApi/user/check?userId='+this.id).then(resp => {
           //                alert(resp.data)
           //          if(resp.data=true){
           //               this.$router.push({

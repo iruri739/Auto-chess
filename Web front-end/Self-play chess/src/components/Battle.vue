@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state1">
+  <div v-if="state == 2">
     <div class="box">
       <div class="top">
         <ul id="qq_face faceout">
@@ -31,7 +31,7 @@
 import Anime from "animejs";
 export default {
   name: "Battle",
-  props: ["state1", "sec", "playerId", "gameid"],
+  props: ["state", "sec", "playerId","round"],
   data() {
     return {
       armyA: [],
@@ -53,14 +53,16 @@ export default {
     },
     getMockData() {
       var time = setInterval(() => {
-        console.log(this.sec)
-        if (this.sec == 5){
+        //如果状态为战斗中
+        if (this.state == 4){
+          console.log("战斗动画页面请求第"+ this.round +"轮次双方战斗卡牌");
           this.$http
             .get(
-              "http://localhost:8888/game/defaultDataModel?playerId=" + this.playerId
+              "serveApi/game/requestBattleData?playerId=" + this.playerId + "&round=" + this.round
             )
             .then(resp => {
-              console.log(resp.data)
+
+
               if (resp.data.playerOneData.id == this.playerId) {
                 this.armyA = resp.data.playerTwoData.battleCards;
                 this.armyB = resp.data.playerOneData.battleCards;
@@ -69,25 +71,13 @@ export default {
                 this.armyB = resp.data.playerTwoData.battleCards;
               }
             });
+            //状态设置为战斗中
+            console.log("状态设置为战斗中");
+            this.$emit("setState",2);
             this.start()
         }
       }, 1000);
     },
-    // this.funcAsync().then(resp => {
-    //   var sd = [];
-    //   for (let i = 0; i < 3; i++) {
-    //     sd.push(JSON.parse(JSON.stringify(resp.data[Math.floor(Math.random()*30)+1])));
-    //   }
-    //   this.armyA = sd;
-    //   var xd = [];
-    //   for (let i = 0; i < 5; i++) {
-    //     xd.push(JSON.parse(JSON.stringify(resp.data[Math.floor(Math.random()*30)+1])));
-    //   }
-    //   this.armyB = xd;
-    // });
-    // funcAsync() {
-    //   return this.axios.get("/mock/Animals");
-    // },
     start() {
       //时间轴
       var timeline = Anime.timeline({
@@ -122,6 +112,8 @@ export default {
         // console.log("Army1 第" +index1 + "个动物 打Army2 第" +index2 + "个动物");
         if (index1 == -1 || index2 == -1) {
           isOver = true;
+          this.$emit("setState",1);
+          console.log("打斗画面结束，状态设置为战斗结束");
           return;
         }
         var animalA = this.armyA[index1];
@@ -181,12 +173,21 @@ export default {
       if (!isOver) {
         this.fight(timeline);
       }
+      //设置为战斗结束
+      this.$emit("setState",1);
+      console.log("打斗画面结束，状态设置为战斗结束");
+      //BState = false; PState = true;
+      // this.$emit("setState",false,true);
     },
     getSelfFightPosition(selfIndex, enemyIndex) {
       var distance = 70;
       return (enemyIndex - selfIndex) * distance;
     },
     findAnimalIndex(army, position) {
+      if(army.length == 0)
+      {
+        return -1;
+      }
       var isAllDead = true;
       if (army[position] != null && army[position].hp > 0) {
         return position;

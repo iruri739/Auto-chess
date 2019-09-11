@@ -2,32 +2,34 @@
   <div class="container">
     <GameSetting></GameSetting>
     <Timer
-      @getSec="gettime"
+      @resetTime="resetTime"
       @setState="setState"
-      :glod="play.gold"
-      :number="player.rounds"
-      :playerId="playerId"
-      :gameId="player.gameId"
       @cover="cover"
+      @setRound="setRound"      
+      :glod="play.gold"
+      :number="round"
+      :playerId="playerId"
+      :gameId="gameId"
+      :state="state"
     ></Timer>
     <Prepare
       :sec="sec"
       :id="playerId"
-      :state2="Pstate"
+      :state="state"
       :animal="play.cardInventory"
-      :gameID="player.gameId"
+      :gameID="gameId"
       :glod="play.gold"
       @buy="buy"
       @shopping="getGlod"
     ></Prepare>
-    <Battle :state1="Bstate" :sec="sec" :playerId="playerId" :gameid="player.gameId"></Battle>
-    <Player
+    <Battle
+      :round="round"
+      @setState="setState"
+      :state="state"
       :sec="sec"
-      :animals="Animals"
-      :id="playerId"
-      :games="player.gameId"
-      :val="play.hp"
-    ></Player>
+      :playerId="playerId"
+    ></Battle>
+    <Player :sec="sec" :state="state" :animals="Animals" :id="playerId" :gameId="gameId" :val="play.hp"></Player>
   </div>
 </template>
 
@@ -54,65 +56,61 @@ export default {
     return {
       Animals: {},
       img,
-      Pstate: true,
-      Bstate: false,
       playerId: 0,
-      player: {},
-      sec: 0,
-      play:{}
+      sec: 30,
+      play: {},
+      gameId: "",
+      round: 1,
+      //1:战斗结束，2：战斗中， 3：准备中，4：即将战斗
+      state : 1
     };
   },
-  mounted() {
-    
-  },
   created() {
-    console.log("1")
-    this.getPlayer();
-    console.log("2")
     this.getRouterData();
+    this.getPlayer();
   },
   methods: {
-    cover(value){
-       this.play=value
+    cover(value) {
+      this.play = value;
     },
-    gettime(value) {
+    resetTime(value) {
       this.sec = value;
     },
     getRouterData() {
       this.playerId = this.$route.query.id;
-      
     },
     getPlayer() {
       this.$http
-        .get(
-          "http://localhost:8888/game/defaultDataModel?playerId=" +
-            this.playerId
-        )
-        .then(resp => { 
-          this.player = resp.data;
-         
-           if (resp.data.playerOneData.id == this.playerId) {
-                this.play = resp.data.playerOneData; 
-              } else {
-                this.play=resp.data.playerTwoData;
-              }
+        .get("serveApi/game/initRounds?playerId=" + this.playerId)
+        .then(resp => {
+          if (resp.data.playerOneData.id == this.playerId) {
+            this.play = resp.data.playerOneData;
+          } else {
+            this.play = resp.data.playerTwoData;
+          }
+          this.gameId = resp.data.gameId;
+          this.round = resp.data.rounds;
+          // this.sec = resp.data.prepareTime;
         });
     },
     getGlod(value) {
       this.play.gold -= value;
     },
-    setState(value1, value2) {
-      (this.Bstate = value1), (this.Pstate = value2);
+
+    setState(value)
+    {
+      this.state = value;
     },
     buy(value) {
       value.fixed = false;
-      this.Animals=value;
+      this.Animals = value;
+    },
+    setRound(round) {
+      this.round = round;
     }
   }
 };
 </script>
-  
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
   width: 100%;

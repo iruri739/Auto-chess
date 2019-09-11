@@ -46,7 +46,6 @@
 
 <script>
 import { clearTimeout } from 'timers';
-// import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Sceeing",
   data() {
@@ -69,15 +68,7 @@ export default {
     };
   },
   computed: {
-    //  ...mapGetters({
-    //  game: "getGame"
-    // }),
-    // ...mapGetters({
-    //  player1: "getPlayer1"
-    // }),
-    // ...mapGetters({
-    //  player2: "getPlayer2"
-    // }),
+
     text() {
       return {
         id: this.number,
@@ -89,20 +80,13 @@ export default {
     this.startMove();
     this.getPlayer();
     this.timer = setInterval(this.desTimer, 1000);
+
+ 
   },
  created() {
     this.getRouterData()
   },
   methods: {
-    // ...mapActions({
-    //   fetchGameData: "fetchGameData"
-    // }),
-    // ...mapActions({
-    //   fetchPlayer1Data: "fetchPlayer1Data"
-    // }),
-    // ...mapActions({
-    //   fetchPlayer2Data: "fetchPlayer2Data"
-    // }),
      getRouterData() {
       this.playerId = this.$route.query.id
       console.log('id', this.playerId)
@@ -116,33 +100,35 @@ export default {
                      id:this.playerId
                    }
                    });
-       // this.$router.push({ path: "/Home" });
+      
       }
     },
     beforeDestroy(){
     clearInterval(this.timer);
 },
     getPlayer() {
+     
+     
       this.$http
-        .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
+        .get("serveApi/game/initRounds?playerId="+this.playerId)
         .then(resp => {
            if(resp.data.playerOneData.id==this.playerId){
-             this.myName = resp.data.playerOneData.name;
-             this.name = resp.data.playerTwoData.name;
+            this.myName = resp.data.playerOneData.name;
+            this.name = resp.data.playerTwoData.name;
            }else{
-              this.myName = resp.data.playerTwoData.name;
-             this.name = resp.data.playerOneData.name;
+            this.myName = resp.data.playerTwoData.name;
+            this.name = resp.data.playerOneData.name;
            }
-          this.player=resp.data
-          const _this = this;
-          // timer=setTimeout(function() {
-          //   _this.$router.push({ path: "/Home" });
-          // }, 4000);
+          //  debugger
+          // this.player=resp.data
+          //    this.gameId = resp.data.gameId;
+          //    that.setPrepareTime(resp.data.prepareTime);
+          //    that.setRoundData(resp.data.rounds);
+          //    debugger
         },
         );
-        // this.fetchGameData(this.player.game);
-        // this.fetchPlayer1Data(this.player.player1);
-        // this.fetchPlayer2Data(this.player.player2);
+        
+       
     },
 
     //文字轮播

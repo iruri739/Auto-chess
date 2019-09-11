@@ -67,7 +67,7 @@
           </div>
 
           <div class="pic">
-            <img :src="now" />
+            <!-- <img :src="now" /> -->
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default {
     getTimer() {
       time = setInterval(() => {
         this.$http
-          .get("http://localhost:8888/game/matchGame?playerId=" + this.playerId)
+          .get("serveApi/game/matchGame?playerId=" + this.playerId)
           .then(resp => {
             this.bool = resp.data;
           });

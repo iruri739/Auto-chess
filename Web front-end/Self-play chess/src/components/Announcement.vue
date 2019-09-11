@@ -2,7 +2,7 @@
 <template>
 <div id="Announcement">
 <div class="notice" style="margin-top:0px;clear:both">
-<el-tabs v-model="activeName" @tab-click="handleClick">
+<el-tabs v-model="activeName">
 <el-tab-pane label="最新消息" name="first">
 <el-link :underline="false" href="https://www.zizouqi.com/comprehensiveInformation/detail/e4171e46465?lan=zh-cn&mobile=false" target="_blank">《Superance自走棋》国际邀请赛中国区预选赛报名截止通知</el-link><br/>
 <el-link :underline="false" href="https://www.zizouqi.com/comprehensiveInformation/detail/e40fe8a93f6?lan=zh-cn&mobile=false" target="_blank">《Superance自走棋》国际邀请赛中国区报名正式开启</el-link><br/>

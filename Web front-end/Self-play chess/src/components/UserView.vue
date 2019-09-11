@@ -45,7 +45,7 @@ export default {
 
   methods: {
     getOnlineUserList() {
-      this.axios.get("/serveApi/user/getOnlineUserList").then(resp => {   
+      this.axios.get("/serveApi/user/getOnlineList").then(resp => {   
           this.UserList = resp.data.userlist;
       });
     }

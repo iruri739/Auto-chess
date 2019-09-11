@@ -1,5 +1,5 @@
 ﻿<template>
-  <div v-if="state2">
+  <div v-if="state == 3">
     <div class="box">
       <div class="top">
         <ul class="store">
@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  props: ["state2", "glod", "gameID", "id", "sec", "animal"],
+  props: ["state", "glod", "gameID", "id", "sec", "animal"],
   name: "Store",
   data: function() {
     return {
@@ -31,16 +31,17 @@ export default {
     };
   },
   watch: {
-    state2() {
-      this.state2;
-    },
-    sec: function(newVal, oldval) {
-      if (this.sec == 1) {
+    // visiable() {
+    //   this.prepareVisiable;
+    // },
+    state: function(newVal, oldval) {
+      //如果是即将开始则
+      if (this.state == 4) {
         this.axios
           .post("/serveApi/game/updateHandCards", {
             gameId: this.gameID,
             playerId: this.id,
-            Cards: this.bought
+            cards: this.bought
           })
           .then(response => {
             this.bought = [];
@@ -52,7 +53,6 @@ export default {
     }
   },
 
-  computed: {},
   methods: {
     getShop() {
       if (this.glod >= 2) {

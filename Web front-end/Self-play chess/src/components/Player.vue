@@ -73,10 +73,9 @@
 <script>
 import Prepare from "./Prepare";
 import draggable from "vuedraggable";
-import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
-  props: ["animals", "val", "sec", "games", "id"],
+  props: ["animals", "val", "sec", "gameId", "id","state"],
   components: {
     draggable,
     Prepare
@@ -92,27 +91,24 @@ export default {
     };
   },
   mounted() {
-    this.fetchData();
     this.getTimer();
   },
   methods: {
-    ...mapActions({
-      fetchData: "fetchGameData"
-    }),
     getTimer() {
-    var  time = setInterval(() => {
-       
-        if (this.sec==1){
+    var  time = setInterval(() => {    
+        if (this.state==4){
           this.show=false
           this.axios
-            .post("/serveApi/game/battleDataApi", {
-              gameId: this.games,
+            .post("/serveApi/game/sendBattleData", {
+              gameId: this.gameId,
               playerId: this.id,
               cards: this.list2
             })
-            .then(response => {
-              debugger
+            .then(response => {  
               console.log(response.data)
+            })
+            .catch(err=>{
+              clearInterval(this.time);
             });
         }else if(this.sec==30){
              this.show=true
@@ -133,9 +129,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      game: "getGame"
-    }),
     dragOptions() {
       return {
         animation: 0,
@@ -157,6 +150,7 @@ export default {
       if(this.list.length<9){
         this.list.push(newVal)
       }else{
+        //TODO
         console.log("牌库已满")
       }
       
