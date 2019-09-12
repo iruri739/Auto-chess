@@ -236,11 +236,13 @@ ul li {
   margin: 50px auto;
 }
 .top {
-  width: 900px;
+   width: 900px;
   height: 100px;
-  background: #232611;
-  opacity: 0.6;
-  margin: 15px auto;
+  background-image: url("../assets/dongtu.gif");
+  background-position: 50%  10%;
+  opacity:0.6;
+  margin:15px auto; 
+  border-radius:20%; 
 }
 .top ul li {
   text-align: center;
@@ -286,8 +288,10 @@ ul li {
 .down {
   width: 900px;
   height: 100px;
-  background: #232611;
-  opacity: 0.6;
-  margin: 15px auto;
+  background-image: url("../assets/dongtu.gif");
+  background-position: 50%  10%;
+  opacity:0.6;
+  margin:15px auto; 
+  border-radius:20%; 
 }
 </style>

@@ -19,17 +19,24 @@
         </div>
         <!-- <MagicSquare class="MagicSquare"></MagicSquare> -->
         </div>
+
+       <div id="viem">
+      <uii class="uii"></uii>
+      </div>
+
     <Announcement class="yuan"> </Announcement>
 </el-container>
 </template>
 <script>
 //import uselistbg from "@/assets/images/playerlist.jpg"
 import Announcement from './Announcement'
+import Uii from './Uii'
 // import MagicSquare from  "./MagicSquare"
 export default {
   name: "UserView",
   components: {
     Announcement,
+    Uii
     // MagicSquare
     },
   data: function() {
@@ -91,10 +98,11 @@ export default {
       margin:auto;
     }
     .yuan{
-    width: 360px;
+    width: 30%;
     background: black;
-    height: 400px;
-    top: 50%;
+    height: 40%;
+    float: top;
+    /* top: 60%; */
     left: 70%;
     opacity: 0.5;
     position: absolute;
@@ -125,4 +133,12 @@ export default {
      background-image: url("../assets/images/playerlist.jpg");
      margin-top:-50px;     
     }
+#viem {
+    width: 650px;
+    margin-top: -30px;
+  }
+.Uii {
+    margin: auto;
+    }
+
 </style>

@@ -29,6 +29,7 @@
 
 .icon-close1:before {
   content: "\e60b";
+  display: none;
 }
 
 .icon-coin-yen:before {

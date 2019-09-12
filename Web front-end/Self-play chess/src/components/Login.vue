@@ -188,13 +188,13 @@
       </div>
     </el-dialog>
 
-    <div class="sixteen">
+    <!-- <div class="sixteen">
       <span>
         <p>
           <strong>合理安排时间&nbsp;享受健康生活&nbsp;注意自我保护&nbsp;拒绝盗版游戏</strong>
         </p>
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -363,13 +363,13 @@ export default {
 };
 </script>
 <style>
-.login .sixteen {
+/* .login .sixteen {
   height: 40px;
   width: 400px;
   position: absolute;
   top: 90%;
   left: 70%;
-}
+} */
 .login .logo {
   position: absolute;
   right: 30px;

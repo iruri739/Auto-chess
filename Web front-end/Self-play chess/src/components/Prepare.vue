@@ -133,7 +133,7 @@ ul li {
 .icon_l {
   position: absolute;
   left: 5px;
-  top: 5px;
+  top: 30px;
 }
 .icon_r {
   position: absolute;
@@ -153,10 +153,12 @@ ul li {
 .top {
   width: 100%;
   height: 240px;
-  background: #232611;
-  opacity: 0.6;
+  opacity: 0.6; 
   margin: 20px auto;
   position: relative;
+  background-image: url("../assets/huoyanb.gif");
+  background-position: 50%  10%;
+  border-radius:20%;  
 }
 .top ul li {
   list-style: none;
