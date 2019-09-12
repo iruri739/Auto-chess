@@ -10,7 +10,7 @@
         </ul>
         <div class="icon_l">
           <span @click="getShop()" class="iconfont icon-refresh"></span>
-          <span class="iconfont icon-coinyen">{{glod}}</span>
+          <span class="iconfont icon-coinyen">2</span>
         </div>
         <div class="icon_r">
           <span class="iconfont icon-close1"></span>
