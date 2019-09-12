@@ -31,9 +31,7 @@ export default {
     };
   },
   watch: {
-    // visiable() {
-    //   this.prepareVisiable;
-    // },
+
     state: function(newVal, oldval) {
       //如果是即将开始则
       if (this.state == 4) {

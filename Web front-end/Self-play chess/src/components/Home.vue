@@ -29,7 +29,7 @@
       :sec="sec"
       :playerId="playerId"
     ></Battle>
-    <Player :sec="sec" :state="state" :animals="Animals" :id="playerId" :gameId="gameId" :val="play.hp"></Player>
+    <Player :sec="sec" @setState="setState" :state="state" :animals="Animals" :id="playerId" :gameId="gameId" :val="play.hp"></Player>
   </div>
 </template>
 
@@ -57,7 +57,7 @@ export default {
       Animals: {},
       img,
       playerId: 0,
-      sec: 30,
+      sec: 25,
       play: {},
       gameId: "",
       round: 1,

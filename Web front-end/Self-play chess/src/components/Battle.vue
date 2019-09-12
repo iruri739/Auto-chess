@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state == 2">
+  <div v-if="state == 2 || state == 4">
     <div class="box">
       <div class="top">
         <ul id="qq_face faceout">
@@ -31,7 +31,7 @@
 import Anime from "animejs";
 export default {
   name: "Battle",
-  props: ["state", "sec", "playerId","round"],
+  props: ["state", "sec", "playerId", "round"],
   data() {
     return {
       armyA: [],
@@ -53,30 +53,48 @@ export default {
     },
     getMockData() {
       var time = setInterval(() => {
-        //如果状态为战斗中
-        if (this.state == 4){
-          console.log("战斗动画页面请求第"+ this.round +"轮次双方战斗卡牌");
+        //如果状态为即将战斗
+        if (this.state == 4) {
+          console.log("战斗动画页面请求第" + this.round + "轮次双方战斗卡牌");
           this.$http
             .get(
-              "serveApi/game/requestBattleData?playerId=" + this.playerId + "&round=" + this.round
+              "serveApi/game/requestBattleData?playerId=" +
+                this.playerId +
+                "&round=" +
+                this.round
             )
             .then(resp => {
-
-
-              if (resp.data.playerOneData.id == this.playerId) {
-                this.armyA = resp.data.playerTwoData.battleCards;
-                this.armyB = resp.data.playerOneData.battleCards;
-              } else {
-                this.armyA = resp.data.playerOneData.battleCards;
-                this.armyB = resp.data.playerTwoData.battleCards;
+              if (resp.data.cached) {
+                if (resp.data.playerOneData.id == this.playerId) {
+                  this.armyA = resp.data.playerTwoData.battleCards;
+                  this.armyB = resp.data.playerOneData.battleCards;
+                } else {
+                  this.armyA = resp.data.playerOneData.battleCards;
+                  this.armyB = resp.data.playerTwoData.battleCards;
+                }
+                console.log("状态设置为战斗中");
+                this.$emit("setState",2);
+                this.start();
+                this.wait(6)
               }
+
             });
-            //状态设置为战斗中
-            console.log("状态设置为战斗中");
-            this.$emit("setState",2);
-            this.start()
+          //状态设置为战斗中
         }
-      }, 1000);
+      }, 500);
+    },
+    wait(second){
+      let  time=0
+       let descTimer = setInterval(() => {
+            time++
+            console.log("打斗动画倒计时" + (second - time));
+           if(time==second){
+            console.log("打斗画面结束，状态设置为战斗结束");
+
+             this.$emit("setState",1)
+             window.clearInterval(descTimer)
+           }    
+       },1000)
     },
     start() {
       //时间轴
@@ -84,8 +102,11 @@ export default {
         easing: "easeOutExpo",
         duration: 200
       });
+      console.log("开始播放动画");
       this.fight(timeline);
+
     },
+
     fight(t) {
       var timeline = t;
       var isOver = false;
@@ -112,8 +133,8 @@ export default {
         // console.log("Army1 第" +index1 + "个动物 打Army2 第" +index2 + "个动物");
         if (index1 == -1 || index2 == -1) {
           isOver = true;
-          this.$emit("setState",1);
-          console.log("打斗画面结束，状态设置为战斗结束");
+          // this.$emit("setState",1);
+          // console.log("打斗画面结束，状态设置为战斗结束");
           return;
         }
         var animalA = this.armyA[index1];
@@ -165,27 +186,18 @@ export default {
             innerHTML: [animalBHP, hp2],
             round: 1
           });
-        // for(var j=0;j<this.armyA.length;j++){
-        //   console.log("Army1 第" +j + "个动物血量："+ this.armyA[j].hp + "   vs    Army2 第" +j + "个动物血量："+ this.armyB[j].hp);
-        // }
-        //  round++;
       }
       if (!isOver) {
         this.fight(timeline);
       }
-      //设置为战斗结束
-      this.$emit("setState",1);
-      console.log("打斗画面结束，状态设置为战斗结束");
-      //BState = false; PState = true;
-      // this.$emit("setState",false,true);
+
     },
     getSelfFightPosition(selfIndex, enemyIndex) {
       var distance = 70;
       return (enemyIndex - selfIndex) * distance;
     },
     findAnimalIndex(army, position) {
-      if(army.length == 0)
-      {
+      if (army.length == 0) {
         return -1;
       }
       var isAllDead = true;

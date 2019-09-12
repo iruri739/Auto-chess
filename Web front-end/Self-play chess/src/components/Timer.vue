@@ -1,5 +1,16 @@
 <template>
+
   <div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>游戏结束</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleClose">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- <p>这是menu</p> -->
     <div>
       <div class="box">
@@ -56,7 +67,8 @@ export default {
       flg: true,
       statusBar: "",
       play: {},
-      descTimerRunFlg: false
+      descTimerRunFlg: false,
+      dialogVisible: false
     };
   },
 
@@ -66,12 +78,21 @@ export default {
     this.initRound();
     
   },
+
   destroyed() {
     clearInterval(this.totalDuration);
   },
 
   methods: {
-
+    handleClose(done) {
+        this.dialogVisible = false;
+        this.$router.push({
+            name: "Menu",
+            query: {
+              id: this.playerId
+            }
+        })
+    },
 
     startTimer() {
       this.seconds += 1;
@@ -90,7 +111,7 @@ export default {
         //如果是战斗结束，则轮询
         if(this.state == 1)
         {
-        console.log("上一轮战斗结束，status为1，开始初始化战场 initRounds");
+        console.log("上一轮战斗结束，status为战斗结束，开始初始化战场 initRounds");
 
         this.axios.get("serveApi/game/initRounds?playerId=" +this.playerId)
           .then(resp => {
@@ -102,8 +123,12 @@ export default {
             //如果是BATTLE则继续轮询
             if(retState == "FINISHED")
             {
-              alert("游戏结束");
               window.clearInterval(timer);
+              this.$message({
+              type: "success",
+              message: `游戏结束！`
+              });
+
               return;
             }else if(retState == "PREPARE")
             {
@@ -127,99 +152,28 @@ export default {
           }).catch(err => {
               window.clearInterval(timer);
           })}
-      }, 1000);
+      }, 500);
     },
     /**
-     * 战斗倒计时
+     * 准备倒计时
      */
     descTimer() {
       console.log("enter descTimer");
 
       let descTimer = setInterval(() => {
-                this.$emit("resetTime",this.sec);
+        this.$emit("resetTime",this.sec);
          this.sec -= 1;
-         console.log(this.sec);
-         if (this.sec == 0) {
+         console.log("准备中，开始倒计时，剩余时间：" + this.sec);
+         if (this.sec <= 0) {
             //状态设置为战斗中
             this.$emit("setState",4),
-              this.statusBar = "color:red"
-              this.ready = "战斗中"
-              this.preparatoryRound = "战斗回合"
-            this.$emit("resetTime",this.sec);
+            this.statusBar = "color:red"
+            this.ready = "战斗中"
+            this.preparatoryRound = "战斗回合"
             window.clearInterval(descTimer);
        }
       }, 1000);
     },
-            // this.axios
-            //   .get(
-            //     `/serveApi/game/gamePrepareCheck?gameId=${this.gameId}&playerId=${this.playerId}`
-            //   )
-            //   .then(resp => {
-            //     debugger
-            //     if (resp.data == true) {
-            //       (this.Bstate = true), (this.Pstate = false);
-            //       this.$emit("setState", this.Pstate, this.Bstate),
-            //         (this.statusBar = "color:white"),
-            //         (this.ready = "准备中"),
-            //         (this.preparatoryRound = "准备回合"),
-            //         (this.sec = 30);
-            //       this.$emit("getSec", this.sec);
-            //       this.flg = !this.flg;
-            //       this.$http
-            //         .get(
-            //           "serveApi/game/initRounds?playerId=" +
-            //             this.playerId
-            //         )
-            //         .then(resp => {
-            //           //判断state CREATED, GAMING, PREPARE, BATTLE, FINISHED
-            //           //如果返回的如果是FINISHED,则游戏结束
-            //           //如果是PREPARE，程序往下进行
-            //           //如果是BATTLE则继续轮询
-
-            //           if (resp.data.playerOneData.id == this.playerId) {
-            //             this.play = resp.data.playerOneData;
-            //           } else {
-            //             this.play = resp.data.playerTwoData;
-            //           }
-            //           this.$emit("cover", this.play);
-            //         })
-            //       window.clearInterval(time1);
-            //     } else if (resp.data == "win") {
-            //       alert("你赢了");
-            //     } else if (resp.data == "lose") {
-            //       alert("你输了");
-            //     }
-            //   }
-
-            //   ).catch(ex=>{
-            //           window.clearInterval(time1);
-            //         })
-
-
-     
-
-    // watch: {
-    //   second: {
-    //     handler(newVal) {
-    //       this.num(newVal);
-    //     }
-    //   },
-    //   minute: {
-    //     handler(newVal) {
-    //       this.num(newVal);
-    //     },
-    //     sec: {
-    //       handler(newVal) {
-    //         this.num(newVal);
-    //       }
-    //     },
-    //     min: {
-    //       handler(newVal) {
-    //         this.num(newVal);
-    //       }
-    //     }
-    //   }
-    // }
   }
 };
 </script>

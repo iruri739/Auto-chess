@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <div>
-      <div class="down" v-if="show">
+      <div class="down" v-if="state == 3">
         <ul>
           <draggable element="span" v-model="list2" v-bind="dragOptions" :move="onMove">
             <transition-group name="no" class="list-group" tag="ul">
@@ -86,12 +86,11 @@ export default {
       list: [],
       editable: true,
       isDragging: false,
-      delayedDragging: false,
-      show:true
+      delayedDragging: false
     };
   },
   mounted() {
-    this.getTimer();
+    //this.getTimer();
   },
   methods: {
     getTimer() {
@@ -105,24 +104,26 @@ export default {
               cards: this.list2
             })
             .then(response => {  
-              console.log(response.data)
+             
             })
             .catch(err=>{
               clearInterval(this.time);
             });
-        }else if(this.sec==30){
+             this.$emit("setState",4);
+        }else if(this.state==3){
              this.show=true
         }
       }, 1000);
     },
+
     getImage(imgName) {
       var img = imgName;
-
       return require("../assets/images/" + img + ".jpg");
     },
     onMove({ relatedContext,draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
+      console.log("拖动组件");
       return (
         (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
       );
@@ -137,12 +138,6 @@ export default {
         ghostClass: "ghost"
       };
     },
-    listString() {
-      return JSON.stringify(this.list, null, 2);
-    },
-    list2String() {
-      return JSON.stringify(this.list2, null, 2);
-    }
   },
 
   watch: {
@@ -150,22 +145,60 @@ export default {
       if(this.list.length<9){
         this.list.push(newVal)
       }else{
-        //TODO
-        console.log("牌库已满")
+        this.$message({
+                type: "warning",
+                message: `手牌已满！`
+              });
       }
       
+    },
+    state: function(newVal, oldval) {
+      if(newVal != 3)
+      {
+        return;
+      }
+      console.log("游戏状态切换到准备中，发送战场手牌 sendBattleData");
+      this.axios
+            .post("/serveApi/game/sendBattleData", {
+              gameId: this.gameId,
+              playerId: this.id,
+              cards: this.list2
+            })
+            .then(response => {  
+              console.log("调用了sendBattleData可以正常返回");
+            })
+            .catch(err=>{
+              clearInterval(this.time);
+          });       },
+  
+    list2: function(newVal, oldVal) {
+      console.log("监听到军队卡牌变化 list2: function(newVal, oldVal)");
+      this.axios
+            .post("/serveApi/game/sendBattleData", {
+              gameId: this.gameId,
+              playerId: this.id,
+              cards: newVal
+            })
+            .then(response => {  
+              console.log("调用了sendBattleData可以正常返回");
+            })
+            .catch(err=>{
+              clearInterval(this.time);
+          });    
     },
     isDragging(newValue) {
       if (newValue) {
         this.delayedDragging = true;
+        console.log("isDragging");
         return;
       }
       this.$nextTick(() => {
         this.delayedDragging = false;
+        console.log("nextTick");
       });
     }
   }
-};
+}
 </script>
 <style scoped>
 .box {
