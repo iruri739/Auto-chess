@@ -1,5 +1,5 @@
-﻿<template>
-  <div v-if="state == 3">
+<template>
+  <div v-if="state2">
     <div class="box">
       <div class="top">
         <ul class="store">
@@ -21,50 +21,38 @@
 </template>
 <script>
 export default {
-  props: ["state", "glod", "gameID", "id", "sec", "animal"],
+  props: ["state2","glod","game",'id'],
   name: "Store",
   data: function() {
     return {
+      // gold: 9,
       Animals: [],
-      bought: [],
-      count: 0
+      bought: []
+      
     };
   },
   watch: {
-    // visiable() {
-    //   this.prepareVisiable;
-    // },
-    state: function(newVal, oldval) {
-      //如果是即将开始则
-      if (this.state == 4) {
-        this.axios
-          .post("/serveApi/game/updateHandCards", {
-            gameId: this.gameID,
-            playerId: this.id,
-            cards: this.bought
-          })
-          .then(response => {
-            this.bought = [];
-          });
-      }
+    state2() {
+      this.state2;
     },
-    animal: function(newVal, oldval) {
-      this.Animals = newVal;
-    }
-  },
+    // glod:function(newVal){
+    //   this.gold=newVal;
+    // }
 
+  },
+  mounted() {
+
+    this.getMockData();
+  },
+  computed: {},
   methods: {
     getShop() {
-      if (this.glod >= 2) {
+      if (this.glod>= 2) {
+        // this.gold -= 2;
         this.getMockData();
-        this.$emit("shopping", 2);
-      } 
-      else if (this.glod <= 1) {
-        this.$message({
-            type: "info",
-            message: "金币不足!"
-          });
-
+        this.$emit("shopping",2)
+      } else if (this.glod <= 1) {
+        alert("金币不足");
       }
     },
     deletcard(bought, item) {
@@ -76,46 +64,36 @@ export default {
       }
     },
     buycards(item) {
-      if (this.count < 9) {
-        if (typeof item.checked == "undefined" || item.checked == false) {
-          if (this.glod >= item.price) {
-            if (!this.bought) {
-              this.bought = [];
-            }
-            this.$emit("buy", item);
-            this.$emit("shopping", item.price);
-            this.bought.push(item);
-            this.glod -= item.price;
-            this.$set(item, "checked", true);
-            this.count++;
-          } else {
-            this.$message({
-            type: "info",
-            message: "金币不足!"
-          });
-            this.bought = this.deletcard(this.bought, item);
+      if (typeof item.checked == "undefined" || item.checked == false) {
+        if (this.glod >= item.price) {
+          if (!this.bought) {
+            this.bought = [];
           }
+          this.$emit("buy", item);
+          this.$emit("shopping", item.price)
+          this.bought.push(item);
+          this.glod -= item.price;
+          this.$set(item, "checked", true);
+        } else {
+          alert("金币不足");
+          this.bought = this.deletcard(this.bought, item);
         }
       } 
-      else {
-        this.$message({
-            type: "info",
-            message: "牌库已满!"
-          });
-       }
+      // else {
+      //   item.checked = !item.checked;
+      //   this.gold += item.price;
+      //   this.bought = this.deletcard(this.bought, item);
+      // }
     },
     getImage(imgName) {
       var img = imgName;
+
       return require("../assets/images/" + img + ".jpg");
     },
     getMockData() {
-      this.$http
-        .get(
-          `/serveApi/game/getChessData?gameId=${this.gameID}&playerId=${this.id}` 
-        )
-        .then(resp => {
-          this.Animals = resp.data;
-        });
+      this.$http.get("http://localhost:8888/game/getChessData?gameId="+this.game+"&playerId="+this.id).then(resp => {
+        this.Animals = resp.data;
+      });
     }
   }
 };

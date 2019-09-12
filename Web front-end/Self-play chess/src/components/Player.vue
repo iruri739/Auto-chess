@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <div>
-      <div class="down" v-if="show">
+      <div class="down">
         <ul>
           <draggable element="span" v-model="list2" v-bind="dragOptions" :move="onMove">
             <transition-group name="no" class="list-group" tag="ul">
@@ -22,9 +22,8 @@
       <div class="box">
         <div class="left">
           <div class="title">
-            <img src="../assets/touxiang2.jpg" alt />
+            <img src="../assets/touxiang2.jpg" alt/>
           </div>
-         
           <div class="blood">
             <meter
               min="0"
@@ -73,9 +72,10 @@
 <script>
 import Prepare from "./Prepare";
 import draggable from "vuedraggable";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Player",
-  props: ["animals", "val", "sec", "gameId", "id","state"],
+  props: ["animals","val"],
   components: {
     draggable,
     Prepare
@@ -83,44 +83,25 @@ export default {
   data() {
     return {
       list2: [],
-      list: [],
+      list:[],
       editable: true,
       isDragging: false,
-      delayedDragging: false,
-      show:true
+      delayedDragging: false
     };
   },
   mounted() {
-    this.getTimer();
+    this.fetchData();
   },
   methods: {
-    getTimer() {
-    var  time = setInterval(() => {    
-        if (this.state==4){
-          this.show=false
-          this.axios
-            .post("/serveApi/game/sendBattleData", {
-              gameId: this.gameId,
-              playerId: this.id,
-              cards: this.list2
-            })
-            .then(response => {  
-              console.log(response.data)
-            })
-            .catch(err=>{
-              clearInterval(this.time);
-            });
-        }else if(this.sec==30){
-             this.show=true
-        }
-      }, 1000);
-    },
+    ...mapActions({
+      fetchData: "fetchGameData"
+    }), 
     getImage(imgName) {
       var img = imgName;
 
       return require("../assets/images/" + img + ".jpg");
     },
-    onMove({ relatedContext,draggedContext }) {
+    onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
       return (
@@ -129,6 +110,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+     game: "getGame"
+    }),
     dragOptions() {
       return {
         animation: 0,
@@ -142,18 +126,16 @@ export default {
     },
     list2String() {
       return JSON.stringify(this.list2, null, 2);
-    }
+    },
+    // list: function() {
+       
+    //   return this.animals;
+    // }
   },
 
   watch: {
-    animals: function(newVal, oldVal) {
-      if(this.list.length<9){
-        this.list.push(newVal)
-      }else{
-        //TODO
-        console.log("牌库已满")
-      }
-      
+     animals: function(newVal, oldVal) {
+      this.list = newVal;
     },
     isDragging(newValue) {
       if (newValue) {
@@ -174,16 +156,16 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   margin: 0 auto;
 }
-.box .left {
-  width: 60%;
-  height: 95%;
+.left {
+  width: 328px;
+  height: 210px;
   background: #232611;
   opacity: 0.6;
   float: left;
 }
-.box .right {
-  width: 40%;
-  height: 95%;
+.right {
+  width: 210px;
+  height: 210px;
   background: #232611;
   opacity: 0.6;
   float: left;
@@ -245,6 +227,7 @@ export default {
   opacity: 0.6;
   margin: 15px auto;
 }
+
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;

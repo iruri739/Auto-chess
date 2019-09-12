@@ -1,295 +1,224 @@
 <template>
-  <div id="Menu">
-<el-container>
-<el-carousel :interval="4000" type="card" height="350px">
-    <el-carousel-item v-for="item in img" :key="item.index">
-      <div class="limg" :style="{backgroundImage:'url('+item+')'}"></div>
-      <div class="img1"></div>
-    </el-carousel-item>
-</el-carousel> 
- </el-container>
-  <UserView></UserView>
-    <el-container>
-      <div>
-      <el-container>
-        <el-button id="campus-home-btn-group" @click="startGames"  plain>
-          <div class="btn-group-inner">
-                            <div class="start">
-                                <i class="el-icon-check">开始游戏</i>
-                                <em class="em_1"></em>
-                                <em class="em_2"></em>
-                            </div>
-                        </div>     
-        </el-button>
-      </el-container>
+  <div>
+    <!-- <p>这是menu</p> -->
+    <div>
+      <div class="box">
+        <ul class="top">
+          <li></li>
+          <li>round{{number}}</li>
+          <li>
+            <div class="timer">
+              <div ref="startTimer"></div>
+            </div>
+          </li>
+          <li>pieces</li>
+          <li>Gold</li>
+        </ul>
+        <ul class="center">
+          <li>
+            <img :src="img" />
+          </li>
+          <li :style="aa">{{li1}}</li>
+          <li :style="aa">{{li2}}</li>
+          <li>1vs1</li>
+          <li>{{glod}}</li>
+        </ul>
+
+        <div class="bottom">
+          <div>
+            <div :style="aa" ref="descTimer"></div>
+          </div>
+        </div>
       </div>
-      <div>
-      <el-container>
-        <el-button id="campus-home-btn-group1" @click="quitGame" plain>
-           <div class="btn-group-inner">
-                            <div class="over">
-                                <i class="el-icon-close">退出游戏</i>
-                                <em class="em_1"></em>
-                                <em class="em_2"></em>
-                            </div>
-                        </div>
-        </el-button>
-      </el-container>
-      </div>
-    </el-container>
+    </div>
+    <!-- <el-dialog title="游戏结束" :visible.sync="gameVisible" width="30%" :before-close="handleClose">
+      <span>{{result}}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="gameVisible = false">取 消</el-button>
+        <el-button type="primary" @click="gameVisible = false">确 定</el-button>
+      </span>
+    </el-dialog> -->
   </div>
 </template>
+<script type="text/ecmascript-6">
+import img from "@/assets/imgs/ling.jpg";
 
-<script>
-import img1 from "@/assets/imgs/1.jpg";
-import img2 from "@/assets/imgs/2.jpg";
-import img3 from "@/assets/imgs/3.jpg";
-import img4 from "@/assets/imgs/4.jpg";
-import img5 from "@/assets/imgs/5.jpg";
-import UserView from './UserView'
-import img9 from '@/assets/imgs/background4.jpg';
 export default {
   name: "Menu",
-  components: {
-    UserView
-  },
-
-
-   data: function() {
+  props: ["glod", "number"],
+  data: function() {
     return {
-      img: [img1, img2, img3,  img4, img5],
-      id:0
+      li1: "准备中",
+      li2: "准备回合",
+      img,
+      timer: "",
+      content: "",
+      hour: 0,
+      minutes: 0,
+      seconds: 0,
+      min: 0,
+      sec: 30,
+      flg: true,
+      Bstate: true,
+      Pstate: false,
+      aa: ""
     };
   },
-   created() {
-    this.getRouterData()
+  created() {
+    this.timer = setInterval(this.startTimer, 1000);
+    this.timer = setInterval(this.descTimer, 1000);
   },
+  destroyed() {
+    clearInterval(this.timer);
+  },
+
   methods: {
-     getRouterData() {
-      this.id = this.$route.query.id
-      
+  startTimer() {
+      this.seconds += 1;
+      if (this.seconds >= 60) {
+        this.seconds = 0;
+        this.minutes += 1;
+      }
+      this.$refs.startTimer.innerHTML =
+        (this.minutes < 10 ? "0" + this.minutes : this.minutes) +
+        ":" +
+        (this.seconds < 10 ? "0" + this.seconds : this.seconds);
     },
-    startGames: function() {
-         this.$router.push({ 
-                   name: "Waiting" ,
-                   query:{
-                     id:this.id
-                   }
-                   });
-     
+
+  descTimer() {
+      this.sec -= 1;
+      if (this.sec == 0) {
+        if (this.flg) {
+          
+          this.$emit("aaa", this.Bstate, this.Pstate),
+            (this.aa = "color:red"),
+            (this.li1 = "战斗中"),
+            (this.li2 = "战斗回合"),
+            (this.sec = 60);
+        } else {
+          (this.Bstate = true), (this.Pstate = false);
+          this.$emit("aaa", this.Pstate, this.Bstate),
+            (this.aa = "color:white"),
+            (this.li1 = "准备中"),
+            (this.li2 = "准备回合"),
+            (this.sec = 30);
+        }
+        this.flg = !this.flg;
+      }
+
+      // descTimer() {
+      // this.sec -= 1;
+      // if (this.sec == 0) {
+      //     if (this.flg) {
+      //       debugger
+      //       this.$emit("aaa",this.Bstate,this.Pstate),
+      //       (this.aa = "color:red"),
+      //       (this.li1 = "战斗中"),
+      //       (this.li2 = "战斗回合"),
+      //       (this.sec = 60)
+      //     } else {
+      //       debugger
+      //   //     this.Bstate=true,this.Pstate=false
+      //   //     this.$emit("aaa",this.Pstate,this.Bstate),
+      //   //     (this.aa = "color:white"),
+      //   //       (this.li1 = "准备中"),
+      //   //       (this.li2 = "准备回合"),
+      //   //       (this.sec = 30);
+      //    this.$http
+      //       .get("http://localhost:8888/game/checkGameResult/" + gameid + "/" + userid)
+      //       .then(resp => {
+      //         // alert(resp .data);
+      //         {
+      //           if (resp.data === "true") {
+      //             (this.Bstate = true), (this.Pstate = false);
+      //             this.$emit("aaa", this.Pstate, this.Bstate),
+      //               (this.aa = "color:white"),
+      //               (this.li1 = "准备中"),
+      //               (this.li2 = "准备回合"),
+      //               (this.sec = 30);
+      //           } else if (resp.data === "win") {
+      //             this.gameVisible = true;
+      //             this.result = "恭喜您赢得本局游戏";
+      //             windows.clearInterval(this.descTimer);
+      //           } else if(resp.data === "lose"){
+      //             this.gameVisible = true;
+      //             this.result = "很遗憾您输了";
+      //             windows.clearInterval(this.descTimer);
+      //           }
+      //         }
+      //       });
+
+      //    }
+      //     this.flg = !this.flg;
+
+      // }
+      this.$refs.descTimer.innerHTML =
+        this.sec < 10 ? "0" + this.sec : this.sec;
     },
-    quitGame: function() {
-        this.$confirm('即将退出游戏！是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          window.location.href = "https://www.baidu.com"
-        })
+    watch: {
+      second: {
+        handler(newVal) {
+          this.num(newVal);
+        }
+      },
+      minute: {
+        handler(newVal) {
+          this.num(newVal);
+        },
+        sec: {
+          handler(newVal) {
+            this.num(newVal);
+          }
+        },
+        min: {
+          handler(newVal) {
+            this.num(newVal);
+          }
+        }
+      }
     }
   }
 };
 </script>
-
-<style>
-#campus-home-btn-group{
-  display:block;
-  margin:0 auto;
-  top:-177px;
-  position:relative;
-  left:1123px;
-  background:#686d9c;
-  font-size:20px;
-  width:155px; 
-}
-#campus-home-btn-group1{
-  display:block;
-  margin:0 auto;
-  top:-85px;
-  position:relative;
-  left:969px;
-  background:#686d9c;
-  font-size:20px;
-  width:155px; 
-}
-#campus-home-btn-group .start {
-        color: wheat;
-        display: inline-block;
-        width: 100%;
-        position: relative;
-    }
-#campus-home-btn-group1 .over {
-        color: wheat;
-        display: inline-block;
-        width: 100%;
-        position: relative;
-    }
-    #campus-home-btn-group .start em {
-        position: absolute;
-        top: -12.5px;
-        left: -20px;
-        display: block;
-        width: 7.5em;
-        height: 2em;
-        border: 2px solid rgb(238, 241, 243);
-       
-    }
-    #campus-home-btn-group1 .over em {
-        position: absolute;
-        top: -12px;
-        left: -20px;
-        display: block;
-        width: 7.5em;
-        height: 2em;
-        border: 2px solid rgb(238, 241, 243);
-       
-    }
-    #campus-home-btn-group .start:hover em {
-        opacity: .2;
-    }
-
-    #campus-home-btn-group .start:hover em.em_1 {
-        -webkit-animation: 'cbtnem1'.5s linear;
-    }
-
-    #campus-home-btn-group .start:hover em.em_2 {
-        -webkit-animation: 'cbtnem2'.75s linear;
-    }
-
-    #campus-home-btn-group .start:hover em.em_3 {
-        -webkit-animation: 'cbtnem3'1s linear;
-    }
-
-    #campus-home-btn-group .start:hover em.em_4 {
-        -webkit-animation: 'cbtnem4'1.25s linear;
-    }
-
-    #campus-home-btn-group1 .over:hover em {
-        opacity: .2;
-    }
-
-    #campus-home-btn-group1 .over:hover em.em_1 {
-        -webkit-animation: 'cbtnem1'.5s linear;
-    }
-
-    #campus-home-btn-group1 .over:hover em.em_2 {
-        -webkit-animation: 'cbtnem2'.75s linear;
-    }
-
-    #campus-home-btn-group1 .over:hover em.em_3 {
-        -webkit-animation: 'cbtnem3'1s linear;
-    }
-
-    #campus-home-btn-group1 .over:hover em.em_4 {
-        -webkit-animation: 'cbtnem4'1.25s linear;
-    }
-
-
-    @-webkit-keyframes cbtnem1 {
-        0% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 40% 40%
-        }
-
-        50% {
-            -webkit-transform: scale(1.12, 1.4);
-            -webkit-transform-origin: 40% 40%
-        }
-
-        100% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 40% 40%
-        }
-    }
-
-    @-webkit-keyframes cbtnem2 {
-        0% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 40% 60%
-        }
-
-        50% {
-            -webkit-transform: scale(1.12, 1.4);
-            -webkit-transform-origin: 40% 60%
-        }
-
-        100% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 40% 60%
-        }
-    }
-
-    @-webkit-keyframes cbtnem3 {
-        0% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 60% 60%
-        }
-
-        50% {
-            -webkit-transform: scale(1.12, 1.4);
-            -webkit-transform-origin: 60% 60%
-        }
-
-        100% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 60% 60%
-        }
-    }
-
-    @-webkit-keyframes cbtnem4 {
-        0% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 60% 40%
-        }
-
-        50% {
-            -webkit-transform: scale(1.12, 1.4);
-            -webkit-transform-origin: 60% 40%
-        }
-
-        100% {
-            -webkit-transform: scale(1, 1);
-            -webkit-transform-origin: 60% 40%
-        }
-    }
-
-body{
-  width: 100%;
-  background: url('../assets/imgs/background4.jpg');
-  background-size: cover;
-  /* margin-left: 600px; */
-}
-
- #Menu{
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style scoped>
+.top li {
+  list-style: none;
+  width: 20%;
+  height: 30px;
+  float: left;
   text-align: center;
-  color: #2c3e50;
-   margin-top: 10px; 
-} 
-.el-carousel--horizontal {
-  width: 1349px;
-  
- 
+  color: wheat;
+  line-height: 30px;
+  margin-top: 20px;
 }
-
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+.center li {
+  list-style: none;
+  width: 20%;
+  height: 30px;
+  background: black;
+  float: left;
+  text-align: center;
+  color: wheat;
+  line-height: 30px;
 }
+/* .text {
+  line-height: 50px;
+  display: inline-block;
+} */
 
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+.box {
+  width: 40%;
+  height: 100px;
+  margin: 0 auto;
 }
-.limg{
-   background-repeat: no-repeat;
-   background-size:100% 100%; 
- 
-   height: 350px; 
+.bottom {
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  color: white;
 }
-
-
-
-
+img {
+  width: 100px;
+  height: 30px;
+}
 </style>

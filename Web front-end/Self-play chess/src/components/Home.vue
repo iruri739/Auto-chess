@@ -1,45 +1,22 @@
 <template>
   <div class="container">
-    <GameSetting></GameSetting>
-    <Timer
-      @resetTime="resetTime"
-      @setState="setState"
-      @cover="cover"
-      @setRound="setRound"      
-      :glod="play.gold"
-      :number="round"
-      :playerId="playerId"
-      :gameId="gameId"
-      :state="state"
-    ></Timer>
-    <Prepare
-      :sec="sec"
-      :id="playerId"
-      :state="state"
-      :animal="play.cardInventory"
-      :gameID="gameId"
-      :glod="play.gold"
-      @buy="buy"
-      @shopping="getGlod"
-    ></Prepare>
-    <Battle
-      :round="round"
-      @setState="setState"
-      :state="state"
-      :sec="sec"
-      :playerId="playerId"
-    ></Battle>
-    <Player :sec="sec" :state="state" :animals="Animals" :id="playerId" :gameId="gameId" :val="play.hp"></Player>
+    <Draglo></Draglo>
+    <Menu @aaa="aaa" :glod="player.playerOneData.gold" :number="player.playerOneData.winCount"></Menu>
+    <Prepare  :id="playerId"   :state2="Pstate" :game="player.gameId" :glod="player.playerOneData.gold" @buy="buya" @shopping="getGlod"></Prepare>
+    <Battle :state1="Bstate"></Battle>
+    <Player :animals="Animals" :val="player.playerOneData.hp"></Player>
   </div>
 </template>
 
 <script>
-import GameSetting from "./GameSetting";
+import Draglo from "./Draglo";
 import Prepare from "./Prepare";
-import Timer from "./Timer";
+import Menu from "./Menu";
 import Battle from "./Battle";
 import Player from "./Player";
 import img from "@/assets/imgs/save.jpg";
+
+
 export default {
   name: "Home",
   props: {
@@ -47,70 +24,57 @@ export default {
   },
   components: {
     Prepare,
-    Timer,
+    Menu,
     Battle,
     Player,
-    GameSetting
+    Draglo,
+    //  UserMaster
   },
   data: function() {
     return {
-      Animals: {},
+      Animals: [],
       img,
+      Pstate: true,
+      Bstate: false,
       playerId: 0,
-      sec: 30,
-      play: {},
-      gameId: "",
-      round: 1,
-      //1:战斗结束，2：战斗中， 3：准备中，4：即将战斗
-      state : 1
+      player: {}
     };
   },
-  created() {
-    this.getRouterData();
+  mounted() {
     this.getPlayer();
   },
+  created() {
+    this.getRouterData()
+  },
   methods: {
-    cover(value) {
-      this.play = value;
-    },
-    resetTime(value) {
-      this.sec = value;
-    },
     getRouterData() {
-      this.playerId = this.$route.query.id;
-    },
+      this.playerId = this.$route.query.id
+
+     },
     getPlayer() {
       this.$http
-        .get("serveApi/game/initRounds?playerId=" + this.playerId)
+        .get("http://localhost:8888/game/defaultDataModel?playerId="+this.playerId)
         .then(resp => {
-          if (resp.data.playerOneData.id == this.playerId) {
-            this.play = resp.data.playerOneData;
-          } else {
-            this.play = resp.data.playerTwoData;
-          }
-          this.gameId = resp.data.gameId;
-          this.round = resp.data.rounds;
-          // this.sec = resp.data.prepareTime;
+          this.player =resp.data;
+
         });
     },
     getGlod(value) {
-      this.play.gold -= value;
+      this.player.playerOneData.gold -= value;
     },
-
-    setState(value)
-    {
-      this.state = value;
+    aaa(value1, value2) {
+      (this.Bstate = value1), (this.Pstate = value2);
     },
-    buy(value) {
+    buya(value) {
       value.fixed = false;
-      this.Animals = value;
-    },
-    setRound(round) {
-      this.round = round;
+      this.Animals.push(value);
+      
     }
   }
 };
 </script>
+  
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
   width: 100%;
