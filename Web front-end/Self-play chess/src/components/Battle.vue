@@ -75,7 +75,7 @@ export default {
                 console.log("状态设置为战斗中");
                 this.$emit("setState",2);
                 console.log("转换后")
-                this.start();
+               
                 this.wait(6)
               }
 
@@ -89,6 +89,9 @@ export default {
        let descTimer = setInterval(() => {
             time++
             console.log("打斗动画倒计时" + (second - time));
+            if(time==2){
+             this.start();
+            }else 
            if(time==second){
             console.log("打斗画面结束，状态设置为战斗结束");
 
