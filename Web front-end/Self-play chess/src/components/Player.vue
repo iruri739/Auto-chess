@@ -207,16 +207,16 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   margin: 0 auto;
 }
-.left {
-  width: 328px;
-  height: 210px;
+.box .left {
+  width: 60%;
+  height: 95%;
   background: #232611;
   opacity: 0.6;
   float: left;
 }
-.right {
-  width: 210px;
-  height: 210px;
+.box .right {
+  width: 40%;
+  height: 95%;
   background: #232611;
   opacity: 0.6;
   float: left;
