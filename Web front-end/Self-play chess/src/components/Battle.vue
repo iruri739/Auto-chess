@@ -74,6 +74,7 @@ export default {
                 }
                 console.log("状态设置为战斗中");
                 this.$emit("setState",2);
+                console.log("转换后")
                 this.start();
                 this.wait(6)
               }
@@ -98,6 +99,7 @@ export default {
     },
     start() {
       //时间轴
+        console.log("开始动画")
       var timeline = Anime.timeline({
         easing: "easeOutExpo",
         duration: 200

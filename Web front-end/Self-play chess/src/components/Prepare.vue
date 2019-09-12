@@ -157,6 +157,8 @@ ul li {
   margin: 20px auto;
   position: relative;
   background-image: url("../assets/huoyanb.gif");
+  background-size: 100%,100%;
+  background-repeat: no-repeat;
   background-position: 50%  10%;
   border-radius:20%;  
 }

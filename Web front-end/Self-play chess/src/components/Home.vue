@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <GameSetting></GameSetting>
+    <GameSetting @setVolume="setVolume" @setSwitch="setSwitch"></GameSetting>
     <Timer
       @resetTime="resetTime"
       @setState="setState"
       @cover="cover"
-      @setRound="setRound"      
+      @setRound="setRound"
       :glod="play.gold"
       :number="round"
       :playerId="playerId"
@@ -22,14 +22,19 @@
       @buy="buy"
       @shopping="getGlod"
     ></Prepare>
-    <Battle
-      :round="round"
+    <Battle :round="round" @setState="setState" :state="state" :sec="sec" :playerId="playerId"></Battle>
+    <Player
+      :sec="sec"
       @setState="setState"
       :state="state"
-      :sec="sec"
-      :playerId="playerId"
-    ></Battle>
-    <Player :sec="sec" @setState="setState" :state="state" :animals="Animals" :id="playerId" :gameId="gameId" :val="play.hp"></Player>
+      :animals="Animals"
+      :id="playerId"
+      :gameId="gameId"
+      :val="play.hp"
+    ></Player>
+    <audio ref="audio" autoplay loop>
+      <source src="@/assets/music.mp3" />
+    </audio>
   </div>
 </template>
 
@@ -62,7 +67,7 @@ export default {
       gameId: "",
       round: 1,
       //1:战斗结束，2：战斗中， 3：准备中，4：即将战斗
-      state : 1
+      state: 1
     };
   },
   created() {
@@ -70,6 +75,17 @@ export default {
     this.getPlayer();
   },
   methods: {
+    setVolume(index) {
+      this.$refs.audio.volume = index / 100;
+      this.volume = index;
+    },
+    setSwitch(val) {
+      if (val == true) {
+        this.$refs.audio.play();
+      } else {
+        this.$refs.audio.pause();
+      }
+    },
     cover(value) {
       this.play = value;
     },
@@ -97,8 +113,7 @@ export default {
       this.play.gold -= value;
     },
 
-    setState(value)
-    {
+    setState(value) {
       this.state = value;
     },
     buy(value) {
