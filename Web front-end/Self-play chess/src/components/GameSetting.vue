@@ -26,10 +26,10 @@
                 <el-slider v-model="valuef1"></el-slider>
               </div>
               <br />
-              <el-checkbox v-model="checked3">背景音乐</el-checkbox>
+              <el-checkbox v-model="checked3" @change="handleClick1">背景音乐</el-checkbox>
               <div class="block">
                 <span class="demonstration">音量</span>
-                <el-slider v-model="valuet1"></el-slider>
+                <el-slider  v-model="slider" @change="changeVolume"></el-slider>
               </div>
               <br />
             </div>
@@ -48,21 +48,9 @@ export default {
       checked1: true,
       checked2: true,
       checked3: true,
-      value1: 0,
-      value2: 50,
-      value3: 36,
-      value4: 48,
-      value5: 42,
-      valuef1: 0,
-      valuef2: 50,
-      valuef3: 36,
-      valuef4: 48,
-      valuef5: 42,
-      valuet1: 0,
-      valuet2: 50,
-      valuet3: 36,
-      valuet4: 48,
-      valuet5: 42,
+      value1: 100,
+      valuef1: 100,
+      slider: 100,
       show: false,
       activeName: "first",
       count: 0,
@@ -70,6 +58,12 @@ export default {
     };
   },
   methods: {
+    changeVolume(index) {
+       this.$emit("setVolume",index)
+      },
+      handleClick1(value){
+        this.$emit("setSwitch",value)
+      },
     open() {
       this.$confirm("是否退出游戏?", "提示", {
         confirmButtonText: "确定",
@@ -92,9 +86,7 @@ export default {
           });
         });
     },
-    formatTooltip(val) {
-      return val / 100;
-    },
+    
     handleClick: function() {
       this.show = !this.show;
       this.count++;
