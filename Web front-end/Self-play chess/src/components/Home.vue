@@ -30,7 +30,7 @@
       :animals="Animals"
       :id="playerId"
       :gameId="gameId"
-      :val="play.hp"
+      :val="(play.hp*5)"
     ></Player>
     <audio ref="audio" autoplay loop>
       <source src="@/assets/music.mp3" />

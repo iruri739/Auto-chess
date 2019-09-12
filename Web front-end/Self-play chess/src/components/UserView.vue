@@ -11,7 +11,7 @@
                 <el-scrollbar style="height:280px;">
                     <ol id="a4">
                         <li v-for="(user,index) in UserList" :key="index">
-                            {{user.userId}}   {{user.userName}}
+                            {{user}}
                         </li>
                     </ol>
                 </el-scrollbar>
@@ -28,10 +28,8 @@
 </el-container>
 </template>
 <script>
-//import uselistbg from "@/assets/images/playerlist.jpg"
 import Announcement from './Announcement'
 import Uii from './Uii'
-// import MagicSquare from  "./MagicSquare"
 export default {
   name: "UserView",
   components: {
@@ -53,7 +51,7 @@ export default {
   methods: {
     getOnlineUserList() {
       this.axios.get("/serveApi/user/getOnlineList").then(resp => {   
-          this.UserList = resp.data.userlist;
+          this.UserList = resp.data;
       });
     }
   }
@@ -102,7 +100,6 @@ export default {
     background: black;
     height: 40%;
     float: top;
-    /* top: 60%; */
     left: 70%;
     opacity: 0.5;
     position: absolute;
